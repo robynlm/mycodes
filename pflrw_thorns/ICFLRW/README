@@ -1,0 +1,109 @@
+# How to implement this thorn into Einstein Toolkit:
+
+======================================================================================================
+1) Have a working version of Einstein Toolkit
+# Follow the instructions here
+# https://github.com/nds-org/jupyter-et/blob/master/tutorial-server/notebooks/CactusTutorial.ipynb
+# Don't forget to try to run helloworld
+# I added 'module load mpi/openmpi-x86_64' to my .bashrc
+
+======================================================================================================
+
+2) Make sure CT_Dust is included
+# Check Cactus/arrangements/CTThorns and in Cactus/thornlists/einsteintoolkit.th
+# If it's not included you can get it here:
+>> git clone https://bitbucket.org/eloisa/ctthorns.git
+# Add link to arrangements
+>> ln -s ~/codes/ctthorns/CT_Dust/ ~/codes/ET/code/2022_05/Cactus/arrangements/CTThorns/
+# Add to Cactus/thornlists/einsteintoolkit.th, in CTThorns section
+CTThorns/CT_Dust
+
+======================================================================================================
+
+3) Modify CT_Dust
+# In ctthorns/CT_Dust/param.cl change 
+private:
+CCTK_KEYWORD my_initial_data "my_initial_data"
+# to:
+restricted:
+CCTK_KEYWORD my_initial_data "my_initial_data"
+
+======================================================================================================
+
+4) Compile Einstein Toolkit
+# in Cactus directory
+>>./simfactory/bin/sim build -j2 --thornlist=thornlists/einsteintoolkit.th
+# Or
+>> ./simfactory/bin/sim build --machine=sciama --thornlist=thornlists/ET.th
+
+======================================================================================================
+
+5) Include ICFLRW in Einstein Toolkit
+# link
+>> ln -s path_to_thorn/ICFLRW path_to_Cactus/Cactus/arrangements/EinsteinInitialData/
+# add to Cactus/thornlists/einsteintoolkit.th, in EinsteinInitialData section
+EinsteinInitialData/ICFLRW
+
+======================================================================================================
+
+6) Compile Einstein Toolkit
+
+======================================================================================================
+7) Run pure_flrw_test.par to check if it works
+>>./simfactory/bin/sim create-submit pure_flrw_test --parfile=path_to_file/pure_flrw_test.par --procs=1 --num-threads=1
+# Or
+>>./simfactory/bin/sim create-submit pure_flrw_test --machine=sciama --parfile=path_to_file/pure_flrw_test.par --procs=1 --num-threads=1
+
+# Results
+>> tail ~/simulations/pure_flrw_test/output-0000/pure_flrw_test.out
+----------------------------------------------------------------------------------------------
+Iteration      Time | ADMBASE::gxx | ADMBASE::kxx | ADMBASE::alp | CT_DUST::rho |   ML_BSSN::H
+                    |      average |      average |      average |      average |      average
+----------------------------------------------------------------------------------------------
+        0     1.000 |    0.0000109 |   -0.0000072 |    1.0000000 |    0.0530516 | 4.440892e-16
+        1     1.012 |    0.0000110 |   -0.0000073 |    1.0000000 |    0.0518010 | -2.979217e-11
+        2     1.024 |    0.0000112 |   -0.0000073 |    1.0000000 |    0.0505940 | -5.674172e-11
+        3     1.036 |    0.0000114 |   -0.0000073 |    1.0000000 |    0.0494287 | -8.111822e-11
+        4     1.048 |    0.0000116 |   -0.0000073 |    1.0000000 |    0.0483032 | -1.031570e-10
+        5     1.060 |    0.0000117 |   -0.0000074 |    1.0000000 |    0.0472158 | -1.230851e-10
+        6     1.072 |    0.0000119 |   -0.0000074 |    1.0000000 |    0.0461646 | -1.410951e-10
+        7     1.084 |    0.0000121 |   -0.0000074 |    1.0000000 |    0.0451482 | -1.573568e-10
+        8     1.096 |    0.0000123 |   -0.0000075 |    1.0000000 |    0.0441650 | -1.720371e-10
+        9     1.108 |    0.0000124 |   -0.0000075 |    1.0000000 |    0.0432135 | -1.852745e-10
+
+======================================================================================================
+
+8) Be happy
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

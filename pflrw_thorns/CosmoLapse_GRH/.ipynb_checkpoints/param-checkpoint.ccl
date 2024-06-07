@@ -1,0 +1,43 @@
+
+#################################################
+#              Extended keywords
+#################################################
+SHARES: ADMBase
+EXTENDS CCTK_KEYWORD dtlapse_evolution_method "dtlapse_evolution_method"
+{
+  "CosmoLapse_GRH" :: ""
+} 
+EXTENDS CCTK_KEYWORD initial_lapse "initial_lapse"
+{
+  "CosmoLapse_GRH" :: ""
+} 
+EXTENDS CCTK_KEYWORD initial_dtlapse "initial_lapse"
+{
+  "CosmoLapse_GRH" :: ""
+}
+
+SHARES: ML_BSSN
+USES CCTK_REAL harmonicF
+USES CCTK_REAL harmonicN
+
+shares: Cactus
+USES CCTK_REAL cctk_initial_time
+
+#################################################
+#          This Thorn's parameters
+#################################################
+
+######## Keywords
+
+private:
+CCTK_KEYWORD CosmoLapse_GRH_Kexpression "dt_alpha = - f alpha^n (K - Kexpression)"
+{
+  "zero"  :: ""
+  "initial_K"  :: ""
+  "initial_background_K"  :: ""
+  "background_K"  :: ""
+  "domain_average_K"  :: ""
+  "average_K"  :: ""
+} "zero"
+
+

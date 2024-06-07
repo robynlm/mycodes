@@ -1,0 +1,377 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    INSTITUTE OF PHYSICS PUBLISHING                                   %
+%                                                                      %
+%   `Preparing an article for publication in an Institute of Physics   %
+%    Publishing journal using LaTeX'                                   %
+%                                                                      %
+%    LaTeX source code `ioplau2e.tex' used to generate `author         %
+%    guidelines', the documentation explaining and demonstrating use   %
+%    of the Institute of Physics Publishing LaTeX preprint files       %
+%    `iopart.cls, iopart12.clo and iopart10.clo'.                      %
+%                                                                      %
+%    `ioplau2e.tex' itself uses LaTeX with `iopart.cls'                %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+% First we have a character check
+%
+% ! exclamation mark    " double quote  
+% # hash                ` opening quote (grave)
+% & ampersand           ' closing quote (acute)
+% $ dollar              % percent       
+% ( open parenthesis    ) close paren.  
+% - hyphen              = equals sign
+% | vertical bar        ~ tilde         
+% @ at sign             _ underscore
+% { open curly brace    } close curly   
+% [ open square         ] close square bracket
+% + plus sign           ; semi-colon    
+% * asterisk            : colon
+% < open angle bracket  > close angle   
+% , comma               . full stop
+% ? question mark       / forward slash 
+% \ backslash           ^ circumflex
+%
+% ABCDEFGHIJKLMNOPQRSTUVWXYZ 
+% abcdefghijklmnopqrstuvwxyz 
+% 1234567890
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\documentclass[12pt]{iopart}
+\newcommand{\gguide}{{\it Preparing graphics for IOP Publishing journals}}
+%Uncomment next line if AMS fonts required
+%\usepackage{iopams}  
+
+\usepackage[dvipsnames]{xcolor}    % can be removed once comments are removed
+
+\def\jnc#1{\textcolor{ForestGreen}{\tt[JN: #1]}}
+\def\jnt#1{\textcolor{ForestGreen}{#1}}
+
+\def\mbc#1{\textcolor{red}{\tt[MB: #1]}}
+\def\mbt#1{\textcolor{red}{#1}}
+
+\def\rmc#1{\textcolor{blue}{\tt[MB: #1]}}
+\def\rmt#1{\textcolor{blue}{#1}}
+
+
+\begin{document}
+
+\title{Singular and non-singular rotating Black-holes from the Newman-Janis algorithm}
+
+
+\author{Marco Bruni${{^{a,b}}}$   Robyn L. Munoz${{^a}}$ and Jack Neville
+}
+
+\address{${{^a}}$Institute of Cosmology {\rm \&} Gravitation, University of Portsmouth, Dennis Sciama Building, Burnaby Road, Portsmouth, PO1 3FX, United Kingdom}
+\address{${{^b}}$INFN Sezione di Trieste, Via Valerio 2, 34127 Trieste, Italy}
+
+\ead{marco.bruni@port.ac.uk robyn.munoz@port.ac.uk, jackneville99@yahoo.co.uk}
+
+\vspace{10pt}
+\begin{indented}
+\item[]\date{\today}
+\end{indented}
+
+\begin{abstract}
+The Kerr black-hole metric can be obtained from the Schwarzschild metric using the Newman-Janis algorithm. Recently, there has been some renewed interest in non-singular black holes, and new metrics have been proposed, with an asymptotically flat  core, in a phenomelogical approach partly aimed at constraining these models with new electromagnetic and gravitational waves data. Here we focus on the static non rotating metric proposed in  \cite{Ghosh:2014pba,Simpson:2019mud} and the stationary rotating counterpart in \cite{Simpson:2021dyo}. We show that the latter doesn't correspond to the former through the Newman-Janis algorithm. Applying this algorithm  to the non-rotating metric we obtain a new rotating stationary black-hole spacetime, which however has a ring singularity similar to that of Kerr. We also analysise the Petrov type and the gravito-magnetic character of the rotating black holes, showing that...\mbc{this needs to be sorted out} These black-hole models are not solutions of Einstein equations, but if interpreted as such then they are in general supported by a  dark energy distribution with anisotropic pressure concentrated in a shell close to the outer horizon. 
+\end{abstract}
+
+
+
+\section{Introduction}
+General relativity allows for static black holes solutions described by the spherically symmetric Schwarzschild metric and the rotating axially symmetric Kerr metric. These solutions contain physical singularities at $r=0$ making them problematic in the construction of realistic black hole interiors, since singularities are not considered physically sensible.
+\\
+\\
+In recent decades, singularity free space-times based on phenomenological modifications to existing space-times have been proposed, most notably by modifying the Schwarzschild metric such as by Bardeen, Hayward and Frolov in \cite{Bardeen:1968} \cite{Hayward:2005gi} \cite{Frolov:2016pav} respectively. These modified space-times produce a de-Sitter core at $r=0$ and are entirely singularity free. Recently a new non-singular black hole geometry has been proposed firstly by Ghosh in \cite{Ghosh:2014pba} and expanded upon by Simpson and Visser in \cite{Simpson:2019mud}. This new geometry is characterised by a new mass function that achieves an asymptotically Minkowski core (AMC). This means the core is entirely Minkowski. This geometry significantly simplifies the physics and mathematics of the deep core. In \cite{Simpson:2021dyo} Simpson and Visser apply the mass function to the Kerr metric, resulting in what is claimed to be the rotating counterpart to the AMC metric, which they have dubbed, "The eye of the storm" (EOS). In \cite{Ghosh:2014pba} Ghosh makes a similar claim but justifies it believing it would be the result of applying the Newman-Janis Algorithm (NJA) to the AMC metric.\mbc{cite Culeto 1305.5964 and 1408.3334}
+\\
+\\
+We set out to prove by use of the well known NJA that the eye of the storm metric was the correct rotating counterpart to the AMC metric just as proposed by Ghosh, Simpson and Visser. Instead we produce a similar but new metric that we claim is the correct interpretation of a rotating AMC black hole. Our derivation is completely geometric and does not reference the Einstein field equations or a specific theory of gravity.
+\\
+\\
+This work will use a mostly pluses metric signature $(−,+,+,+)$ and will work in units $c = G = 1$
+\section{Methodology}
+In this next section, starting from a modified Schwarzschild metric, we are going to use a complex null tetrad with the NJA to derive a rotating counterpart to the previously proposed spherically symmetric metric.
+\subsection{Modified Schwarzschild black hole with asymptotically Minkowski core}
+The modified Schwarzschild metric presented by Visser and Simpson in \cite{Simpson:2019mud} is produced by considering a new mass function and applying it in the context of the Schwarzschild solution. This is a Phenomenological modification and makes no reference to a specific gravity theory, therefore it is not a solution of the Einstein field equations and is instead just a starting geometry with no assumptions about the dynamics of the resulting space-time. The new mass function is given by the following.
+\begin{equation}
+M \rightarrow M(r) = Me^{\frac{-l}{r}}
+\end{equation}
+This function modifies the gravitational mass to make it exponentially decay as it approaches $r=0$, forcing the new black hole to have a core that is asymptotically Minkowski.  It contains a free parameter $l$, with dimensions of length, that measures the deviation from the standard Schwarzschild mass. This means that for $l=0$, $M(r) = M$.
+\\
+\\
+The AMC metric need not be a vacuum solution like the Schwarzschild metric and indeed is not a vacuum solution. The line element for a black hole with asymptotically Minkowski core is given by 
+\\
+\\
+\begin{equation}
+ds^2 = -(1-\frac{2Me^{-l/r}}{r})dt^2 + \frac{dr^2}{(1-\frac{2Me^{-l/r}}{r})}+r^2d\Omega^2 
+\end{equation}
+\begin{equation}
+d\Omega^2 = (d\theta^2+\sin^2(\theta)d\phi^2)
+\end{equation}
+\\
+\\
+This new line element is advantageous as it contains no physical singularities due to the properties of the exponential function. The singularity at $r=0$ is eliminated because $\lim_{r\to 0^+} e^{\frac{-l}{r}} \rightarrow 0$  and $\lim_{r\to 0^+} \frac{e^{\frac{-l}{r}}}{r} \rightarrow 0$, showing that the line element becomes Minkowski as you approach $r=0$. Since $r$ is defined everywhere, in a sense the mass is distributed everywhere but as $\lim_{r\to +\infty} e^{\frac{-l}{r}} \rightarrow 1$ the mass looks Schwarzschild at large $r$. This makes it easy to see that at $r=0$ the line element becomes Minkowksi.
+\\
+\\
+\subsection{Complex null tetrad}
+A pair of real null vectors ($n^{\mu}$ \& $l^{\mu}$) and a pair of complex null vectors ($m^{\mu}$ \& $\bar{m}^{\mu}$) together can be used to represent the metric, the contravariant form is as follows, Assuming space time metric signature $(-,+,+,+)$ \cite{dInverno:1992gxs}. 
+\begin{equation}
+g^{\mu \nu}=-l^{\mu}n^{\nu}-l^{\nu}n^{\mu}+m^{\mu}\Bar{m}^{\nu}+m^{\nu}\Bar{m}^{\mu}
+\end{equation}
+A complex null tetrad vectors respect the following normalisation conditions \cite{dInverno:1992gxs}.
+\begin{equation} 
+l_{\mu}l^{\mu}=n_{\mu}n^{\mu}=m_{\mu}m^{\mu}=\bar{m}_{\mu}\bar{m}^{\mu}=0
+\end{equation}
+\begin{equation} 
+l_{\mu}m^{\mu}=l_{\mu}\bar{m}^{\mu}=n_{\mu}\bar{m}^{\mu}=n_{\mu}\bar{m}^{\mu}=0
+\end{equation}
+\begin{equation} 
+l_{\mu}n^{\mu}=l^{\mu}n_{\mu} =-1,\ m_{\mu}\bar{m}^{\mu}=m^{\mu}\bar{m}_{\mu}=1
+\end{equation}
+A general null tetrad for any spherically symmetric metric will be presented in the next subsection in the context of the NJA.
+\\
+\\
+ \subsection{Newman-Janis Algorithm}
+ The Newman-Janis algorithm \cite{Newman:1965tw}, was used to generate the Kerr metric from the Schwarzschild metric. This was done by allowing $r$ to take on complex values. This however can be generalised and performed on any spherically symmetric seed metric \cite{Drake:1997hh} \cite{Drake:1998gf}. The Newman-Janis Algorithm can be summarised as follows. 
+ \begin{enumerate}
+  \item Define a seed metric and use Eddington-Finkelstein coordinates to then define a seed metric function $f(r)$ .
+  \item Represent the metric as a complex null tetrad of vectors.
+   \item Perform a complex transformation to complexify the seed metric function to replace it with $f(r,\overline{r})$.
+   \item Perform coordinate transformation, to Boyer-Lindquist for example.
+ \end{enumerate}
+ The general procedure used in \cite{Drake:1997hh} \cite{Drake:1998gf} was followed. Equation (20) represents a spherically symmetric line element with arbitrary seed function $f(r)$. We switch to using a mostly minuses signature $(+,-,-,-)$ to keep in line with \cite{Drake:1997hh}.\mbc{better to stick with the positive signature}
+ \begin{equation} 
+     ds^2=  f(r)dt^2-\frac{1}{f(r)}dr^2-r^2(d\theta^2+\sin^2(\theta)d\phi^2)
+ \end{equation}
+ This line element can be generally represented in ingoing Eddington–Finkelstein coordinates as follows
+ \begin{equation} 
+     ds^2=  f(r)du^2+2dudr-r^2(d\theta^2+\sin^2(\theta)d\phi^2)
+\end{equation}
+This line element represented as a contravariant metric is
+\\
+\[
+   g^{\mu \nu}= 
+  \left[ {\begin{array}{ccccc}
+0 & 1 & 0 & 0\\
+1 & -f(r) & 0 & 0\\
+0 & 0 & \frac{-1}{r^2} & 0\\
+0 & 0 & 0 & \frac{-1}{r^2\sin^2(\theta)}\\
+  \end{array} } \right]
+\]
+ We do this so that the metric can be written as a complex null tetrad of vectors,a set of four vectors where two, $l$ \& $n$, are real and two, $m$ \& $\bar{m}$, are complex. This is represented in the following.
+ \begin{equation} 
+  l^{\mu}=\delta^{\mu}_1
+ \end{equation}
+ \begin{equation}
+ n^{\mu}=\delta^{\mu}_0-\frac{1}{2}f(r)\delta^{\mu}_1
+ \end{equation}
+ \begin{equation} 
+ m^{\mu}=\frac{1}{\sqrt{2}r}(\delta^{\mu}_2+\frac{i}{\sin(\theta)}\delta^{\mu}_3)
+ \end{equation}
+ \begin{equation} 
+ \bar{m}^{\mu}=\frac{1}{\sqrt{2}\Bar{r}}(\delta^{\mu}_2-\frac{i}{\sin(\theta)}\delta^{\mu}_3)
+ \end{equation}
+ This complex null tetrad is the starting point of the actual derivation \cite{Drake:1997hh}. The $r$ coordinate is then allowed to take on complex values such that $r \rightarrow r+ia\cos(\theta)$ \& $\bar{r} \rightarrow r-ia\cos(\theta)$.$r$ however remains real and $a$ is a new constant that will be identified with rotation. This means that the previous function $f(r)$ is now a complex function $f(r,\bar{r})=f(r,\theta)$. This transforms the null tetrad to be functions of $r$ and $\theta$, $f(r,\theta)$ is a completely different function to the previous $f(r)$. The following is the transformed null tetrad. \cite{Drake:1997hh}.
+ \begin{equation} 
+ l^{\mu}=\delta^{\mu}_1
+ \end{equation}
+ \begin{equation}
+ n^{\mu}=\delta^{\mu}_0-\frac{1}{2}f(r,\theta)\delta^{\mu}_1
+ \end{equation}
+ \begin{equation} 
+ m^{\mu}=\frac{1}{\sqrt{2}(r+ia\cos(\theta))}(\delta^{\mu}_2+\frac{i}{\sin(\theta)}\delta^{\mu}_3+ia\sin(\theta)(\delta^{\mu}_0-\delta^{\mu}_1))
+ \end{equation}
+ \begin{equation} \
+ \bar{m}^{\mu}=\frac{1}{\sqrt{2}(r-ia\cos(\theta))}(\delta^{\mu}_2-\frac{i}{\sin(\theta)}\delta^{\mu}_3-ia\sin(\theta)(\delta^{\mu}_0-\delta^{\mu}_1))
+ \end{equation}
+ This now represents the transformed metric, the metric components can be found by using equation (21) \mbc{correct equation numbers } with the rotated null tetrad. the following contravariant and covariant metric is the result, this is in coordinates $x^\alpha = (u,r,\theta , \phi)$ \cite{Drake:1997hh}. "." represents that the metric is symmetric $g_{\mu \nu}=g_{\nu \mu}$.
+\\
+\[
+g^{\mu \nu}=
+  \left[ {\begin{array}{ccccc}
+    \frac{-a^2\sin^2(\theta)}{\Sigma} & 1+\frac{a^2\sin^2(\theta)}{\Sigma} & 0 & \frac{-a}{\Sigma}\\
+    . & -f(r,\theta)-\frac{a^2\sin^2(\theta)}{\Sigma} & 0 & \frac{a}{\Sigma}\\
+    . & . & \frac{-1}{\Sigma} & 0\\
+    . & . & . & \frac{-1}{\Sigma \sin^2(\theta)}\\
+  \end{array} } \right]
+\]
+\\
+\[
+g_{\mu \nu}=
+  \left[ {\begin{array}{ccccc}
+ f(r,\theta) & 1 & 0 & -a\sin^2(\theta)(1-f(r,\theta))\\
+ . & 0 & 0 & -a\sin^2(\theta)\\
+ . & . & -\Sigma & 0\\
+ . & . & . & -\sin^2(\theta)(\Sigma+a^2\sin^2(\theta)(2-f(r,\theta)))\\
+  \end{array} } \right]
+\]
+ The coordinates can then be transformed to get the metric into the more easily readable Boyer-Lindquist coordinates, which is given generally as follows.
+\\
+\[
+   g_{\mu \nu}=
+  \left[ {\begin{array}{ccccc}
+ f(r,\theta) & 0 & 0 & -a\sin^2(\theta)(1-f(r,\theta))\\
+ . & -\frac{\Sigma}{(\Sigma f(r,\theta)+a^2\sin^2(\theta))} & 0 & 0\\
+ . & . & -\Sigma & 0\\
+ . & . & . & -\sin^2(\theta)(\Sigma+a^2\sin^2(\theta)(2-f(r,\theta)))\\
+  \end{array} } \right]
+\]
+ In \cite{Drake:1997hh} they claim this to be the complete family of metrics in Boyer-Lindquist coordinates obtainable using the Newman-Janis algorithm from a spherically symmetric starting seed metric. This method will be applied to generate a new axially symmetric metric from the AMC metric.
+\section{results}
+First we shall present the derivation of the new metric by using the previously presented generalised NJA to go from the modified spherically symmetric metric. This will be followed by a discussion of this new metric including in the context of comparing it to the eye of the storm metric proposed by Simpson and Visser.
+\subsection{derivation}
+In \cite{Ghosh:2014pba} Ghost suggests that the EOS metric is what would result from applying the Newman-Janis algorithm to the spherically symmetric line element \ref{2.2}, it is not clear that this is indeed the case as will be demonstrated by using the generalised Newman-Janis algorithm to generate a new rotating metric that is slightly different from the EOS metric. As outlined in prior we can construct a null tetrad for the metric with line element equation \ref{2.1} by taking $f(r)=(1-\frac{2Me^{\frac{-l}{r}}}{r})$ as the seed function. The resulting null tetrad is as follows
+ \begin{equation} 
+ l^{\mu}=\delta^{\mu}_1
+ \end{equation}
+ \begin{equation}
+ n^{\mu}=\delta^{\mu}_0-\frac{1}{2}(1-\frac{2Me^{\frac{-l}{r}}}{r})\delta^{\mu}_1
+ \end{equation}
+ \begin{equation}
+ m^{\mu}=\frac{1}{\sqrt{2}r}(\delta^{\mu}_2+\frac{i}{\sin(\theta)}\delta^{\mu}_3)
+ \end{equation}
+ \begin{equation}
+ \bar{m}^{\mu}=\frac{1}{\sqrt{2}\Bar{r}}(\delta^{\mu}_2-\frac{i}{\sin(\theta)}\delta^{\mu}_3)
+ \end{equation}
+ \\
+ The only part effected by the Newman-Janis algorithm is in the real vector $n^{\mu}$, as $r$ must be complexified while preserving the real nature of the vector. The way the standard $\frac{1}{r}$ factor was complexified for Schwarzschild in \cite{Newman:1965tw} \cite{dInverno:1992gxs} \cite{Drake:1998gf} is in the following way.
+ \begin{equation}
+ \frac{1}{r} \rightarrow \frac{1}{2}(\frac{1}{r}+\frac{1}{\bar{r}})
+ \end{equation}
+ This still maintains $r$ and therefore $n^{\mu}$ as real valued. It can be justified then that the new factor of $e^{\frac{-l}{r}}$, which has an exponent of $\frac{1}{r}$ should be complexified in an identical way, causing $n^{\mu}$ to be to take the following form
+ \\
+ \begin{equation} 
+ n^{\mu}=\delta^{\mu}_0-\frac{1}{2}(1-2Me^{-l\frac{1}{2}(\frac{1}{r}+\frac{1}{\bar{r}})}\frac{1}{2}(\frac{1}{r}+\frac{1}{\bar{r}}))\delta^{\mu}_1
+ \end{equation}
+ This can then be simplified with $\frac{1}{r} \rightarrow \frac{1}{2}(\frac{1}{r}+\frac{1}{\bar{r}}) = \frac{r}{\Sigma}$ to give the new rotated null tetrad, representing the new rotated metric. 
+ \begin{equation} 
+ l^{\mu}=\delta^{\mu}_1
+ \end{equation}
+ \begin{equation} 
+ n^{\mu}=\delta^{\mu}_0-\frac{1}{2}(1-\frac{2Me^{\frac{-lr}{\Sigma}}r}{\Sigma})\delta^{\mu}_1
+ \end{equation}
+ \begin{equation}
+ m^{\mu}=\frac{1}{\sqrt{2}(r+ia\cos(\theta))}(\delta^{\mu}_2+\frac{i}{\sin(\theta)}\delta^{\mu}_3+ia\sin(\theta)(\delta^{\mu}_0-\delta^{\mu}_1))
+ \end{equation}
+ \begin{equation}
+ \bar{m}^{\mu}=\frac{1}{\sqrt{2}(r-ia\cos(\theta))}(\delta^{\mu}_2-\frac{i}{\sin(\theta)}\delta^{\mu}_3-ia\sin(\theta)(\delta^{\mu}_0-\delta^{\mu}_1))
+ \end{equation}
+Using the generalised procedure with $f(r,\theta ) =  (1-\frac{2Me^{\frac{-lr}{\Sigma}}r}{\Sigma})$ we can express the new metric as the following covariant matrix in Boyer-Lindquist coordinates.
+\\
+\\
+\[
+g_{\mu \nu}=
+  \left[ {\begin{array}{ccccc}
+ (1-\frac{2Me^{\frac{-lr}{\Sigma}}r}{\Sigma}) & 0 & 0 & a\sin^2(\theta)(\frac{2Me^{\frac{-lr}{\Sigma}}r}{\Sigma})\\
+ . & -\frac{\Sigma}{(\Sigma (1-\frac{2Me^{\frac{-lr}{\Sigma}}r}{\Sigma})+a^2\sin^2(\theta))} & 0 & 0\\
+ . & . & -\Sigma & 0\\
+ . & . & . & -\sin^2(\theta)(\Sigma+a^2\sin^2(\theta)(1+\frac{2Me^{\frac{-lr}{\Sigma}}r}{\Sigma}))\\
+  \end{array} } \right]
+\]
+This can then be used to obtain the following line element.
+\begin{equation}
+ds^{2}=(1-{\frac {2Me^{\frac{-lr}{\Sigma}}r}{\Sigma }})dt^{2} - {\frac {\Sigma }{\tilde{\Delta} }}dr^{2}- \Sigma d\theta ^{2} - (r^{2}+a^{2}+{\frac {2Me^{\frac{-lr}{\Sigma}}ra^{2}}{\Sigma }}\sin ^{2}\theta)\sin ^{2}\theta d\phi ^{2} + {\frac {4Me^{\frac{-lr}{\Sigma}}ra\sin ^{2}\theta }{\Sigma }}dt d\phi 
+ \end{equation}
+ \begin{equation}
+ \Sigma = r^2+a^2\cos^2(\theta)
+ \end{equation}
+ \begin{equation} 
+ \tilde{\Delta} = r^2+a^2-2Mre^{\frac{-lr}{\Sigma}}
+ \end{equation}
+This line element represents the newly generated Kerr-like metric resulting from the generalised NJA. If we treat the new exponential factor as being apart of a new $\theta$ mass function, which looks like the following
+\begin{equation}
+m(r,\theta) = Me^{-\frac{-lr}{\Sigma}}
+\end{equation}
+It can be seen that unlike the previous mass function, this one takes on a different limiting value around $r=0$. $\lim_{r\to 0} m(r,\theta) \rightarrow M$ where as $\lim_{r\to 0^+} m(r) \rightarrow 0$. This means our mass function could potentially allow negative $r$ values as the double sided limit does exist, these will be ignored for a lack of physical interpation.
+\subsection{discussion}
+The metric generated from applying the NJA to the AMC metric is different from the EOS metric by introduction of a $\theta$ term in the exponential, which could be interpreted as the mass function taking on $\theta$ dependence, $m(r) \rightarrow m(\theta,r)$. A few $\theta$ dependent mass functions are briefly discussed in \cite{Simpson:2021dyo} (although not this one). They found that it has severe implications for its mathematical tractability, this appears to be true in this case as well. It can be noted though that in the equatorial plane and at $r=0$, our line element and the Eye of the storm line element become equivalent. This implies the orbits and effective potential in the equatorial plane will be the same for both metrics.
+\\
+\\
+why this is the sensible rotating generalisation?
+\section{conclusion}
+We have generated a whole new metric by applying the Newman-Janis algorithm to a previously proposed modified Schwarzschild metric. We propose this as the rotating generalisation of the AMC metric contrary to previous claims by Ghosh that the Newman-Janis algorithm should generate the eye of the storm metric when applied to the asymptotically Minkowski core metric. Although the addition of a $\theta$ dependence appears to damage the ability to obtain closed form solutions.
+\\
+\\
+summary, highlight keypoint.
+\\
+\\
+
+
+
+
+
+future prospects. including not included calculations, final details etc
+\\
+\\
+closing remarks etc
+\pagebreak
+
+
+
+
+
+
+
+\begin{thebibliography}{99}
+%\cite{Bardeen:1968}
+\bibitem{Bardeen:1968}
+J.~M.~Bardeen,
+``Non-singular general-relativistic gravitational collapse,''
+Proceedings of of International Con-
+ference GR5 (Tbilisi, USSR, 1968) p. 174.
+%\cite{Hayward:2005gi}
+\bibitem{Hayward:2005gi}
+S.~A.~Hayward,
+``Formation and evaporation of regular black holes,''
+Phys. Rev. Lett. \textbf{96} (2006), 031103
+%doi:10.1103/PhysRevLett.96.031103
+[arXiv:gr-qc/0506126].
+%\cite{Frolov:2016pav}
+\bibitem{Frolov:2016pav}
+V.~P.~Frolov,
+``Notes on nonsingular models of black holes,''
+Phys. Rev. D \textbf{94} (2016) no.10, 104056
+%doi:10.1103/PhysRevD.94.104056
+[arXiv:1609.01758].
+%\cite{Ghosh:2014pba}
+\bibitem{Ghosh:2014pba}
+S.~G.~Ghosh,
+``A nonsingular rotating black hole,''
+Eur. Phys. J. C \textbf{75} (2015) no.11, 532
+%\cite{Simpson:2019mud}
+\bibitem{Simpson:2019mud}
+A.~Simpson and M.~Visser,
+``Regular black holes with asymptotically Minkowski cores,''
+Universe \textbf{6} (2019) no.1, 8
+%\cite{Simpson:2021dyo}
+\bibitem{Simpson:2021dyo}
+A.~Simpson and M.~Visser,
+``The eye of the storm: a regular Kerr black hole,''
+JCAP \textbf{03} (2022) no.03, 011
+%\cite{dInverno:1992gxs}
+\bibitem{dInverno:1992gxs}
+R.~d'Inverno,
+``Introducing Einstein's relativity,''
+(1992)
+Oxford: Oxford University Press
+%\cite{Newman:1965tw}
+\bibitem{Newman:1965tw}
+E.~T.~Newman and A.~I.~Janis,
+``Note on the Kerr spinning particle metric,''
+J. Math. Phys. \textbf{6} (1965), 915-917
+%\cite{Drake:1997hh}
+\bibitem{Drake:1997hh}
+S.~P.~Drake and R.~Turolla,
+``The Application of the Newman-Janis algorithm in obtaining interior solutions of the Kerr metric,''
+Class. Quant. Grav. \textbf{14} (1997), 1883-1897
+[arXiv:gr-qc/9703084].
+%\cite{Drake:1998gf}
+\bibitem{Drake:1998gf}
+S.~P.~Drake and P.~Szekeres,
+``Uniqueness of the Newman-Janis algorithm in generating the Kerr-Newman metric,''
+Gen. Rel. Grav. \textbf{32} (2000), 445-458
+\end{thebibliography}
+\end{document}
+

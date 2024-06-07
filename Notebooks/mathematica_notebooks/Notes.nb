@@ -1,0 +1,461 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     23304,        453]
+NotebookOptionsPosition[     22351,        429]
+NotebookOutlinePosition[     22713,        445]
+CellTagsIndexPosition[     22670,        442]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[TextData[{
+ StyleBox["xTensor:", "Title",
+  FontColor->GrayLevel[0]],
+ "\n",
+ StyleBox["DefManifold[M4,4,{\[Mu],\[Nu],\[Lambda],\[Upsilon],\[Sigma]}]",
+  Background->RGBColor[0.87, 0.94, 1]],
+ "\nCall a tensor as: Tensor[\[Mu],-\[Nu]]  with index defined in \
+DefManifold, with -  for covariant and nothing for contravariant\n",
+ StyleBox["DefMetric[-1,g[-\[Mu],-\[Nu]],CD,{\[OpenCurlyDoubleQuote];\
+\[CloseCurlyDoubleQuote], \[OpenCurlyDoubleQuote]",
+  Background->RGBColor[0.87, 0.94, 1]],
+ Cell[BoxData[
+  OverscriptBox["\[Del]", "-"]],
+  CellChangeTimes->{{3.794802948367755*^9, 3.794803070525828*^9}, {
+   3.7948032403921947`*^9, 3.7948033089652033`*^9}, {3.79480372139395*^9, 
+   3.794803780662965*^9}, {3.794803866961636*^9, 3.7948038673381157`*^9}, {
+   3.794804099556459*^9, 3.794804099686213*^9}, {3.7948051489101133`*^9, 
+   3.794805149051559*^9}, {3.794806814668126*^9, 3.7948068590490017`*^9}, {
+   3.794806976235057*^9, 3.794806988104617*^9}, {3.794807152248713*^9, 
+   3.7948071536678143`*^9}, {3.794807427585553*^9, 3.7948074563005123`*^9}, {
+   3.794807487020749*^9, 3.7948075030671673`*^9}},
+  Background->RGBColor[0.87, 0.94, 1],ExpressionUUID->
+  "9d3c0297-cde7-474d-8bf6-176649ebd366"],
+ StyleBox["\[CloseCurlyDoubleQuote]},PrintAs -> \[OpenCurlyDoubleQuote]",
+  Background->RGBColor[0.87, 0.94, 1]],
+ Cell[BoxData[
+  OverscriptBox["g", "_"]],
+  CellChangeTimes->{{3.794802948367755*^9, 3.794803070525828*^9}, {
+   3.7948032403921947`*^9, 3.7948033089652033`*^9}, {3.79480372139395*^9, 
+   3.794803780662965*^9}, {3.794803866961636*^9, 3.7948038673381157`*^9}, {
+   3.794804099556459*^9, 3.794804099686213*^9}, {3.7948051489101133`*^9, 
+   3.794805149051559*^9}, {3.794806814668126*^9, 3.7948068590490017`*^9}, {
+   3.794806976235057*^9, 3.794806988104617*^9}, {3.794807152248713*^9, 
+   3.7948071536678143`*^9}, {3.794807427585553*^9, 3.7948074563005123`*^9}, {
+   3.794807487020749*^9, 3.7948075030671673`*^9}},
+  Background->RGBColor[0.87, 0.94, 1],ExpressionUUID->
+  "4bdc7052-9d5e-4465-a854-3173d9ea73b1"],
+ StyleBox["\[CloseCurlyDoubleQuote]]\n",
+  Background->RGBColor[0.87, 0.94, 1]],
+ "Covariant derivative: CD[index][expr]",
+ StyleBox["\nPrintAs[ChristoffelCD] ^= \[OpenCurlyDoubleQuote]\[CapitalGamma]\
+\[CloseCurlyDoubleQuote]\nDefTensor[v[\[Mu]],M4,args]",
+  Background->RGBColor[0.87, 0.94, 1]],
+ "               args such as: PrintAs, OrthogonalTo, ProjectedWith",
+ StyleBox["\nIndexSet[lhs, rhs]\nDefConstantSymbol[\[Kappa]]\n\
+DefScalarFunction[f]\n\nIndexSolve[eqn,T]",
+  Background->RGBColor[0.87, 0.94, 1]],
+ "                         solves eqn (linear) for T and returns a rule\n",
+ StyleBox["MakeRule[{lhs,rhs}]\n\
+AutomaticRules[EE,MakeRule[{EE[\[Mu],-\[Mu]],0}]]\n\nLieD[v[\[Mu]]][v[\[Nu]]]\
+\nSTFPart[expr, metric]\nAntisymmetrize[expr, {indices}]",
+  Background->RGBColor[0.87, 0.94, 1]]
+}], "Text",
+ CellChangeTimes->{{3.795153477807086*^9, 3.795153491072526*^9}, {
+   3.795154010310588*^9, 3.795154047243185*^9}, 3.795154181021799*^9, {
+   3.7951546800981493`*^9, 3.795154791129991*^9}, {3.795154847493655*^9, 
+   3.795154902579421*^9}, {3.795154934180295*^9, 3.795155077613315*^9}, {
+   3.795155466422917*^9, 3.795155492280819*^9}, {3.795156008367999*^9, 
+   3.795156033899406*^9}, {3.795156109779711*^9, 3.795156198222073*^9}, {
+   3.795158848787052*^9, 3.795158913357707*^9}, {3.7951591562683277`*^9, 
+   3.795159178315795*^9}, {3.795159233387892*^9, 3.795159251696835*^9}, 
+   3.795166845238964*^9, 3.7951668980683126`*^9, {3.79516696697935*^9, 
+   3.795166972655034*^9}, 3.795167014614596*^9, {3.795238713729945*^9, 
+   3.7952387560813627`*^9}, {3.79523879678321*^9, 3.795238804126906*^9}, {
+   3.795238839303461*^9, 3.7952388493561172`*^9}, {3.7952391383172483`*^9, 
+   3.7952391733841248`*^9}, {3.795239417209196*^9, 3.7952394555483923`*^9}, {
+   3.795239523722617*^9, 3.795239535639924*^9}, {3.795239810255807*^9, 
+   3.795239820423349*^9}, {3.7952398942637777`*^9, 3.795239957890114*^9}, {
+   3.79524082917027*^9, 3.795240857629092*^9}, {3.795241225426063*^9, 
+   3.79524123008958*^9}, {3.7958471322133207`*^9, 
+   3.795847132963336*^9}},ExpressionUUID->"51aa486c-aedf-4a96-b4a8-\
+83fb44ac49f2"],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ StyleBox["$Tensors",
+  Background->RGBColor[0.87, 0.94, 1]],
+ "\t  "
+}], "Text",
+ CellChangeTimes->{{3.795153477807086*^9, 3.795153491072526*^9}, {
+   3.795154010310588*^9, 3.795154047243185*^9}, 3.795154181021799*^9, {
+   3.7951546800981493`*^9, 3.795154791129991*^9}, {3.795154847493655*^9, 
+   3.795154902579421*^9}, {3.795154934180295*^9, 3.795155077613315*^9}, {
+   3.795155466422917*^9, 3.795155492280819*^9}, {3.795156008367999*^9, 
+   3.795156033899406*^9}, {3.795156109779711*^9, 3.795156198222073*^9}, {
+   3.795158848787052*^9, 3.795158913357707*^9}, {3.7951591562683277`*^9, 
+   3.795159178315795*^9}, {3.795159233387892*^9, 3.795159251696835*^9}, 
+   3.795166845238964*^9, 3.7951668980683126`*^9, {3.79516696697935*^9, 
+   3.795166972655034*^9}, 3.795167053703155*^9, {3.795168012060935*^9, 
+   3.79516802948285*^9}, 
+   3.79543980539851*^9},ExpressionUUID->"b787b61f-df56-42a0-960b-\
+c72122cb0fd5"],
+
+Cell[TextData[{
+ StyleBox["                 (4.4.4. in xTensorRefGuide)\n\tepsilon\t\tmetric\t\
+\ttotally antisymmetric tensor covariantly constant with respect to the \
+metric\n\tTetra\t\tmetric\n\tTetra\[Dagger]\t\tmetric \n\tTorsion\t\tcovd\t\t\
+torsion tensor associated to the connection covd\n\tChristoffel\tcovd\t\t\
+Christoffel symbol associated to the connection covd and the fiducial PD\n\t\
+((AChristoffel\tcovd\t\tinternal Christoffel symbol associated to the \
+connection covd))\n\tRiemann\tcovd\t\tcurvature tensor associated to the \
+connection covd\n\t((FRiemann\tcovd\t\tinternal curvature tensor associated \
+to the connection covd))\n\tRicci\t\tcovd\t\tRicci tensor associated to the \
+connection covd\n\tRicciScalar\tmetric-covd\tRicci scalar associated to the \
+metric connection metric-covd\n\tEinstein\tmetric-covd\tEinstein tensor \
+associated to the metric connection metric-covd\n\tWeyl\t\tmetric-covd\tWeyl \
+tensor associated to the metric connection metric-covd\n\tTFRicci\t\t\
+metric-covd\tTrace-free Ricci tensor associated to the connection metric-covd\
+\n\tKretschmann\tmetric-covd\t\n\tDet\t\tmetric\n\t\n\t((Projector\t\
+induc-metric\tProjector tensor on a codimension-1 surface with induced metric \
+induc-metric))\n\tExtrinsicK\tinduc-metric\tExtrinsic curvature tensor of a \
+codimension-1 surface with induced metric induc-metric\n\tAcceleration\t\
+vector\t\tAcceleration of vector\n\t\n\t",
+  FontFamily->"Source Sans Pro",
+  FontSize->14,
+  FontWeight->"Regular"],
+ StyleBox["Defined by User:", "Subtitle",
+  FontFamily->"Source Sans Pro",
+  FontSize->18,
+  FontWeight->"Regular",
+  FontVariations->{"Underline"->True}],
+ StyleBox["\n\tg, n, \[Gamma], dg, u, du\n\t\n\t",
+  FontFamily->"Source Sans Pro",
+  FontSize->14,
+  FontWeight->"Regular"],
+ StyleBox["Geometrical quantities:", "Subtitle",
+  FontFamily->"Source Sans Pro",
+  FontSize->18,
+  FontWeight->"Regular",
+  FontVariations->{"Underline"->True}],
+ StyleBox["\n\ta\[Gamma]\t\tscale factor of the spatial hypersurfaces\n\tH\
+\[Gamma]\t\tHubble factor of the spatial hypersurfaces\n\tConnection\[Gamma]\t\
+coefficients of the connection\n\tCS\[Gamma]                         \
+constants of structure on the hypersurfaces\n\tnt\[Gamma]                     \
+     symmetric tensor part involved in the decomposition of CS, in Ellis and \
+MacCallum (1969). \n\t\t\t(for Bianchi space-times of type other then I)\n\t\
+av\[Gamma]\t\t'vector' part involved in the decomposition of CS, in Ellis and \
+MacCallum (1969). \n\t\t\t(for Bianchi space-times of type other then I)\n\t\
+\[ScriptK]\[Gamma]\t\t(constant) curvature parameter of the isotropic and \
+homogeneous hypersurfaces\n\t\n\t",
+  FontFamily->"Source Sans Pro",
+  FontSize->14,
+  FontWeight->"Regular"],
+ StyleBox["Scalar field and fluid quantities:", "Subtitle",
+  FontFamily->"Source Sans Pro",
+  FontSize->18,
+  FontWeight->"Regular",
+  FontVariations->{"Underline"->True}],
+ StyleBox["\n\t\[CurlyPhi]\t\tgeneral scalar field\n\t\[Rho]u\t\tenergy \
+density of the fluid\n\tPu\t\tpressure of the fluid\n\t\n\t",
+  FontFamily->"Source Sans Pro",
+  FontSize->14,
+  FontWeight->"Regular"],
+ StyleBox["Perturbed fluid four-velocity:", "Subtitle",
+  FontFamily->"Source Sans Pro",
+  FontSize->18,
+  FontWeight->"Regular",
+  FontVariations->{"Underline"->True}],
+ StyleBox["\n\tV0\[Gamma]u\t\ttime part of the perturbed fluid four-velocity, \
+du=V0 \[Times] n + Vspat\n\tVspat\[Gamma]u\tspatial part of the perturbed \
+fluid four-velocity\n\tVs\[Gamma]u\t\tscalar part of the scalar-vector \
+decomposition of 'Vspat'\n\tVv\[Gamma]u\t\tvector part of the scalar-vector \
+decomposition of 'Vspat'\n\t\n\t",
+  FontFamily->"Source Sans Pro",
+  FontSize->14,
+  FontWeight->"Regular"],
+ StyleBox["Perturbation of the metric:\n", "Subtitle",
+  FontFamily->"Source Sans Pro",
+  FontSize->18,
+  FontWeight->"Regular",
+  FontVariations->{"Underline"->True}],
+ StyleBox["            ", "Subtitle",
+  FontFamily->"Source Sans Pro",
+  FontSize->18,
+  FontWeight->"Plain"],
+ StyleBox["\[Phi]\[Gamma]\t\tfirst Bardeen potential, corresponding to the 00 \
+component of the metric perturbation\n\tBs\[Gamma]\t\tscalar part of the \
+scalar-vector decomposition of the 0i components of the metric perturbation\n\
+\tBv\[Gamma]\t\tvector part of the scalar-vector decomposition of the 0i \
+components of the metric perturbation\n\t\[Psi]\[Gamma]\t\tsecond Bardeen \
+potential, present in the spatial components of the metric perturbation\n\tEs\
+\[Gamma]\t\tscalar part of the scalar-vector-tensor decomposition of the \
+spatial components of the metric perturbation\n\tEv\[Gamma]\t\tvector part of \
+the scalar-vector-tensor decomposition of the spatial components of the \
+metric perturbation\n\tEt\[Gamma]\t\ttensor part of the scalar-vector-tensor \
+decomposition of the spatial components of the metric perturbation\n\t\n\t",
+  FontFamily->"Source Sans Pro",
+  FontSize->14,
+  FontWeight->"Regular"],
+ StyleBox["Gauge vector and its decomposition:", "Subtitle",
+  FontFamily->"Source Sans Pro",
+  FontSize->18,
+  FontWeight->"Regular",
+  FontVariations->{"Underline"->True}],
+ StyleBox["\n\t\[Xi]\t\tthe general vector field used in a gauge \
+transformation\n\tT\[Gamma]\t\tfactor of the time component of the vector \
+field \[Xi]\n\tLs\[Gamma]\t\tscalar part of the scalar-vector decomposition \
+of the spatial component of the vector field \[Xi]\n\tLv\[Gamma]\t\tvector \
+part of the scalar-vector decomposition of the spatial component of the \
+vector field \[Xi]\n\t\n\t",
+  FontFamily->"Source Sans Pro",
+  FontSize->14,
+  FontWeight->"Regular"],
+ StyleBox["Perturbation parameter:", "Subtitle",
+  FontFamily->"Source Sans Pro",
+  FontSize->18,
+  FontWeight->"Regular",
+  FontVariations->{"Underline"->True}],
+ StyleBox["\n\t\[Epsilon]\t\tdefault perturbation parameter\n\t\
+\[ScriptCapitalN]0\[Gamma]\t\ttime part of the perturbation of the normal \
+vector to constant time hypersurfaces (whith index down)\n\t\t\tIn the ADM \
+formalism, it is equal to the lapse function.\n\t\[ScriptCapitalN]\[Gamma]\t\t\
+normal vector to constant time hypersurfaces\n\td\[ScriptCapitalN]\[Gamma]\t\t\
+perturbation of the normal vector to constant time hypersurfaces\n\t\
+\[ScriptCapitalN]i\[Gamma]\t\tshift vector (in the ADM formalism) of the \
+normal vector to constant time hypersurfaces\n\t\t\t(It is only meaningful \
+when used with and upper index)\n\tga\[Gamma]2, Invga\[Gamma]2, \
+RiemannDownCDa\[Gamma]2, K\[Gamma], , ChristoffelCDCDa\[Gamma]2",
+  FontFamily->"Source Sans Pro",
+  FontSize->14,
+  FontWeight->"Regular"]
+}], "Input",
+ CellChangeTimes->{{3.795159674305794*^9, 3.7951596833503447`*^9}, {
+   3.7951597401468477`*^9, 3.7951598175041113`*^9}, {3.795167447075416*^9, 
+   3.795167502285535*^9}, {3.795167540178734*^9, 3.795167623539091*^9}, {
+   3.795167666547274*^9, 3.795167698404523*^9}, {3.795167741913357*^9, 
+   3.795167940371166*^9}, {3.795168125922489*^9, 3.795168231715879*^9}, {
+   3.795168268125935*^9, 3.7951682749468718`*^9}, {3.795168336040077*^9, 
+   3.795168346627616*^9}, {3.79516837879919*^9, 3.795168389783682*^9}, {
+   3.795168455294606*^9, 3.795168616099524*^9}, {3.79516865738853*^9, 
+   3.795168714643796*^9}, {3.795180814296781*^9, 3.795180914748933*^9}, {
+   3.79524128799825*^9, 3.795241307815114*^9}, {3.795241428118528*^9, 
+   3.795241561876738*^9}, {3.795241607594749*^9, 3.795241643941478*^9}, {
+   3.79524169973989*^9, 3.795241785677302*^9}, {3.795241835170993*^9, 
+   3.795241879060645*^9}, {3.795241929612249*^9, 3.7952419567766733`*^9}, {
+   3.795242013181229*^9, 3.795242195287098*^9}, {3.795242227911955*^9, 
+   3.795242279024871*^9}, {3.795242310634145*^9, 3.795242324839926*^9}, {
+   3.7952423887991962`*^9, 3.795242396835106*^9}, {3.795242454324456*^9, 
+   3.795242605358637*^9}, {3.79525610032977*^9, 3.795256269354698*^9}, {
+   3.7952563223629103`*^9, 3.795256326148697*^9}, {3.79525636218541*^9, 
+   3.7952566463718843`*^9}, {3.7952566843260727`*^9, 3.795256729406384*^9}, {
+   3.795256763649619*^9, 3.795256797445549*^9}, {3.7952571999206944`*^9, 
+   3.795257207100789*^9}, 3.7953267500457067`*^9, {3.795439809358996*^9, 
+   3.79543981264042*^9}},ExpressionUUID->"3f21936e-4282-4eb3-9d67-\
+6b2adc777cd2"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[TextData[{
+ StyleBox["xPert:", "Title",
+  FontColor->GrayLevel[0]],
+ "\nCall a tensor as: Tensor[LI[perturbative order], indexes]\n",
+ StyleBox["DefMetricPerturbation[g, dg, \[Epsilon]]",
+  Background->RGBColor[0.87, 0.94, 1]],
+ "            Do not need this if xPand DefMetricField is used\n",
+ StyleBox["\nDefTensorPerturbation[dT[LI[], inds], T[inds], M4,args]\n\n\
+Perturbation[tensor, order]\nPerturbed[tensor, order] ",
+  Background->RGBColor[0.87, 0.94, 1]],
+ "                        Power series function of ",
+ StyleBox["$PerturbationParameter",
+  Background->RGBColor[0.87, 0.94, 1]],
+ "\n",
+ StyleBox["//ExpandPerturbation\nPerturbationOrder[%]",
+  Background->RGBColor[0.87, 0.94, 1]]
+}], "Text",
+ CellChangeTimes->{{3.795153644287694*^9, 3.795153649342949*^9}, {
+   3.795154155543325*^9, 3.7951541792058287`*^9}, {3.7951546034665737`*^9, 
+   3.795154653497822*^9}, {3.7951551034684896`*^9, 3.79515514156454*^9}, {
+   3.795155236869871*^9, 3.795155327637767*^9}, {3.795155372870431*^9, 
+   3.7951553736362457`*^9}, {3.795155436126205*^9, 3.795155444293783*^9}, {
+   3.795155803763814*^9, 3.795155888700534*^9}, {3.795156311970681*^9, 
+   3.795156313098371*^9}, 3.795156809111196*^9, {3.795239323934195*^9, 
+   3.79523940832975*^9}},ExpressionUUID->"8729f3bd-cdca-41e3-9243-\
+06b2fb824c07"],
+
+Cell[TextData[{
+ StyleBox["xPand:", "Title",
+  FontColor->GrayLevel[0]],
+ "\nCall a tensor as: Tensor[LI[perturbative order],LI[number of time \
+derivatives] indexes]\n",
+ StyleBox["SetSlicing[g,n,\[Gamma],cd{\[OpenCurlyDoubleQuote]|\
+\[CloseCurlyDoubleQuote], \[OpenCurlyDoubleQuote]",
+  Background->RGBColor[0.87, 0.94, 1]],
+ Cell[BoxData[
+  OverscriptBox["D", "_"]],
+  CellChangeTimes->{{3.794738758374609*^9, 3.794738787579709*^9}, {
+    3.7947428952490797`*^9, 3.794742918496634*^9}, {3.7947429759794683`*^9, 
+    3.794743090463873*^9}, {3.7947431565172157`*^9, 3.794743219422564*^9}, 
+    3.794743266740543*^9, {3.794743319751182*^9, 3.7947433235687447`*^9}, {
+    3.794743357259063*^9, 3.794743454308609*^9}, {3.794801867834738*^9, 
+    3.7948019244964123`*^9}, {3.794801961916951*^9, 3.7948019882413387`*^9}, {
+    3.794803357247991*^9, 3.794803377766674*^9}, {3.79480345400249*^9, 
+    3.7948034640091257`*^9}, {3.794803827374975*^9, 3.794803843328052*^9}, {
+    3.794803873418351*^9, 3.794803891108243*^9}},
+  Background->RGBColor[0.87, 0.94, 1],ExpressionUUID->
+  "4b54b3df-c7f8-41b8-a6b8-4ac09c462703"],
+ StyleBox["\[CloseCurlyDoubleQuote]},\[CloseCurlyDoubleQuote]FLCurved\
+\[CloseCurlyDoubleQuote]]",
+  Background->RGBColor[0.87, 0.94, 1]],
+ "                 from ",
+ StyleBox["?$ListOfSpaceTypes",
+  Background->RGBColor[0.87, 0.94, 1]],
+ "  {Anisotropic, BianchiB, BianchiA, BianchiI, FLCurved, FLFlat, Minkowski}.",
+ StyleBox["\nDefMetricFields[g, dg, \[Gamma]]",
+  Background->RGBColor[0.87, 0.94, 1]],
+ "                                               see all those defined with \
+",
+ StyleBox["$Metrics\nDefMatterFields[u, du, \[Gamma]]\n\
+$FirstOrderTensorPerturbations=True/False\n\
+$FirstOrderVectorPerturbations=True/False\n\nConformalRules[g,ga\[Gamma]2]\n\
+Conformal[g, ga\[Gamma]2][g[\[Mu], \[Nu]]]\nConformalWeight[Tensor[indice]]=1 \
+",
+  Background->RGBColor[0.87, 0.94, 1]],
+ "                               automatically 1 for new tensor",
+ StyleBox["\n\nExtractOrder[expr,order]\nVisualizeTensor[expr,\[Gamma]]\n\
+ExtractComponents[expr, \[Gamma], ListOfProjectors]",
+  Background->RGBColor[0.87, 0.94, 1]],
+ "               {\[OpenCurlyDoubleQuote]Time\[CloseCurlyDoubleQuote],\
+\[CloseCurlyDoubleQuote]Time\[CloseCurlyDoubleQuote]} for 00, {\
+\[OpenCurlyDoubleQuote]Space\[CloseCurlyDoubleQuote],\[CloseCurlyDoubleQuote]\
+Space\[CloseCurlyDoubleQuote]} for ij, nothing for table",
+ StyleBox["\n\n/.SplitMetric[g, dg, \[Gamma], \
+\[CloseCurlyDoubleQuote]AnyGauge\[CloseCurlyDoubleQuote]]",
+  Background->RGBColor[0.87, 0.94, 1]],
+ "                            from ",
+ StyleBox["?$ListOfGauges",
+  Background->RGBColor[0.87, 0.94, 1]],
+ "  {AnyGauge, FluidComovingGauge, ScalarFieldComovingGauge, FlatGauge, \
+IsoDensityGauge, NewtonGauge, SynchronousGauge}",
+ StyleBox["\nSplitPerturbations[expr, SplitMetric[], \[Gamma]]",
+  Background->RGBColor[0.87, 0.94, 1]],
+ "                applies the above rule",
+ StyleBox["\nSplitMatter[u, du, -1, \[Gamma], gauge, order]\n\nToxPand[expr, \
+dg, u, du, \[Gamma], gauge, order]\n",
+  Background->RGBColor[0.87, 0.94, 1]],
+ "                   \[OpenCurlyQuote]--> Conformal transformation\n          \
+         \[OpenCurlyQuote]--> Perturbes expr upto order\n                   \
+\[OpenCurlyQuote]--> Applies SplitMetric and SplitMatter\n      \n      "
+}], "Text",
+ CellChangeTimes->{{3.7951536773406277`*^9, 3.7951536874684896`*^9}, {
+   3.795153905599574*^9, 3.7951539071740513`*^9}, {3.79515398811322*^9, 
+   3.795153989303207*^9}, {3.795154063966322*^9, 3.79515406614025*^9}, 
+   3.795154182965782*^9, {3.7951545937454233`*^9, 3.795154594457418*^9}, {
+   3.795156366699992*^9, 3.795156457661838*^9}, 3.795156498376605*^9, {
+   3.795156538924695*^9, 3.795156590561388*^9}, {3.795156631662325*^9, 
+   3.795156656973014*^9}, {3.795156687986308*^9, 3.7951566910868073`*^9}, {
+   3.795156734102994*^9, 3.7951567454216757`*^9}, 3.7951567981079473`*^9, {
+   3.795156868460475*^9, 3.795156877965016*^9}, {3.7951573532278757`*^9, 
+   3.79515746283241*^9}, {3.795157590900976*^9, 3.795157670140457*^9}, {
+   3.795157842215662*^9, 3.7951578798539267`*^9}, {3.79515792333912*^9, 
+   3.7951579955351753`*^9}, {3.79515809295334*^9, 3.795158113934449*^9}, {
+   3.795158235531653*^9, 3.795158300689848*^9}, {3.795158427697269*^9, 
+   3.7951584508059883`*^9}, {3.7951671220174*^9, 3.795167140974262*^9}, {
+   3.7951706861690283`*^9, 3.795170691598768*^9}, {3.79517081690257*^9, 
+   3.7951708252340727`*^9}, {3.795176704282524*^9, 3.795176711762578*^9}, {
+   3.795238156407003*^9, 3.795238167205365*^9}, {3.7952382806393948`*^9, 
+   3.795238296492614*^9}, {3.795238393948833*^9, 3.795238418712429*^9}, {
+   3.795238462735012*^9, 3.795238515464322*^9}, {3.79523962706472*^9, 
+   3.7952396475286818`*^9}, {3.79524475589357*^9, 
+   3.795244766103017*^9}},ExpressionUUID->"a69ef402-a502-4826-bcb4-\
+1dd632c028cb"],
+
+Cell[TextData[{
+ StyleBox["xCoda:", "Title",
+  FontColor->GrayLevel[0]],
+ "\n\n"
+}], "Text",
+ CellChangeTimes->{{3.7951536773406277`*^9, 3.7951536874684896`*^9}, {
+   3.795153905599574*^9, 3.7951539071740513`*^9}, {3.79515398811322*^9, 
+   3.795153989303207*^9}, {3.795154063966322*^9, 3.79515406614025*^9}, 
+   3.795154182965782*^9, {3.7951545937454233`*^9, 3.795154594457418*^9}, {
+   3.795156366699992*^9, 3.795156457661838*^9}, 3.795156498376605*^9, {
+   3.795156538924695*^9, 3.795156590561388*^9}, {3.795156631662325*^9, 
+   3.795156656973014*^9}, {3.795156687986308*^9, 3.7951566910868073`*^9}, {
+   3.795156734102994*^9, 3.7951567454216757`*^9}, 3.7951567981079473`*^9, {
+   3.795156868460475*^9, 3.795156877965016*^9}, {3.7951573532278757`*^9, 
+   3.79515746283241*^9}, {3.795157590900976*^9, 3.795157670140457*^9}, {
+   3.795157842215662*^9, 3.7951578798539267`*^9}, {3.79515792333912*^9, 
+   3.7951579955351753`*^9}, {3.79515809295334*^9, 3.795158113934449*^9}, {
+   3.795158235531653*^9, 3.795158300689848*^9}, {3.795158427697269*^9, 
+   3.7951584508059883`*^9}, {3.7951671220174*^9, 3.795167140974262*^9}, {
+   3.7951706861690283`*^9, 3.795170691598768*^9}, {3.79517081690257*^9, 
+   3.7951708252340727`*^9}, {3.795176704282524*^9, 
+   3.795176716573732*^9}},ExpressionUUID->"00d19028-7282-45f6-9d40-\
+1c4e708dfbb6"],
+
+Cell[TextData[{
+ StyleBox["Useful:", "Title",
+  FontColor->GrayLevel[0]],
+ "\n",
+ StyleBox["org[expr_]:=ScreenDollarIndices@NoScalar@Collect[ContractMetric[\
+expr], $PertubationParameter, ToCanonical]\n\
+collect[expr_]:=ScreenDollarIndices@NoScalar@Collect[expr, \
+$PertubationParameter, ContractMetric]\nMyToxPand[expr_, gauge_, order_] := \
+ToxPand[expr, dg, u, du, \[Gamma], gauge, order]\n\nDefTensor[Tmunu[-\[Mu],-\
+\[Nu]],M4]\n$Dust=True;\n\
+IndexSet[Tmunu[\[Mu]_,\[Nu]_],((\[Rho]u[]+If[$Dust,0,Pu[]])u[\[Mu]]u[\[Nu]]+(\
+If[$Dust,0,Pu[]])g[\[Mu],\[Nu]])]\n",
+  Background->RGBColor[0.87, 0.94, 1]]
+}], "Text",
+ CellChangeTimes->{{3.7951536131831512`*^9, 3.79515365289167*^9}, {
+   3.795154077074678*^9, 3.795154079606306*^9}, 3.795154184880821*^9, {
+   3.795157887056569*^9, 3.7951579052838717`*^9}, {3.795238919612739*^9, 
+   3.795239037487082*^9}},ExpressionUUID->"03c33dae-799f-4287-bb0a-\
+9aa50116d831"]
+},
+CellGrouping->Manual,
+WindowSize->{Full, Full},
+WindowMargins->{{119, Automatic}, {Automatic, 21}},
+FrontEndVersion->"12.0 for Mac OS X x86 (64-bit) (April 8, 2019)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 4159, 71, 536, "Text",ExpressionUUID->"51aa486c-aedf-4a96-b4a8-83fb44ac49f2"],
+Cell[CellGroupData[{
+Cell[4764, 97, 929, 17, 35, "Text",ExpressionUUID->"b787b61f-df56-42a0-960b-c72122cb0fd5"],
+Cell[5696, 116, 8192, 151, 1382, "Input",ExpressionUUID->"3f21936e-4282-4eb3-9d67-6b2adc777cd2"]
+}, Open  ]]
+}, Open  ]],
+Cell[13915, 271, 1307, 25, 280, "Text",ExpressionUUID->"8729f3bd-cdca-41e3-9243-06b2fb824c07"],
+Cell[15225, 298, 4874, 85, 648, "Text",ExpressionUUID->"a69ef402-a502-4826-bcb4-1dd632c028cb"],
+Cell[20102, 385, 1329, 22, 119, "Text",ExpressionUUID->"00d19028-7282-45f6-9d40-1c4e708dfbb6"],
+Cell[21434, 409, 913, 18, 349, "Text",ExpressionUUID->"03c33dae-799f-4287-bb0a-9aa50116d831"]
+}
+]
+*)
+

@@ -1,0 +1,355 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     12378,        345]
+NotebookOptionsPosition[     12087,        332]
+NotebookOutlinePosition[     12422,        347]
+CellTagsIndexPosition[     12379,        344]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Get", "[", "\"\<KrancThorn`\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"SetEnhancedTimes", "[", "False", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"SetSourceLanguage", "[", "\"\<C\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Tname", " ", "=", " ", "\"\<BReact\>\""}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+  "(*", "*****************************************************************************)"}\
+], 
+  RowBox[{"(*", "Tensors", "*)"}], 
+  RowBox[{
+  "(*", "*****************************************************************************)"}\
+], 
+  RowBox[{"(*", 
+   RowBox[{
+   "Register", " ", "the", " ", "tensor", " ", "quantities", " ", "with", " ",
+     "the", " ", "TensorTools", " ", "package"}], "*)"}], 
+  RowBox[{
+   RowBox[{"Map", "[", 
+    RowBox[{"DefineTensor", ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "g", ",", "K", ",", "detg", ",", "gu", ",", "trK", ",", "trK2", ",", 
+       " ", "A2", ",", " ", "V"}], "}"}]}], "]"}], 
+   ";"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Map", "[", 
+   RowBox[{"AssertSymmetricIncreasing", ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"g", "[", 
+       RowBox[{"la", ",", "lb"}], "]"}], ",", 
+      RowBox[{"K", "[", 
+       RowBox[{"la", ",", "lb"}], "]"}]}], "}"}]}], "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Map", "[", 
+    RowBox[{"AssertSymmetricDecreasing", ",", 
+     RowBox[{"{", 
+      RowBox[{"gu", "[", 
+       RowBox[{"ua", ",", "ub"}], "]"}], "}"}]}], "]"}], ";"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{
+   "Use", " ", "the", " ", "CartGrid3D", " ", "variable", " ", "names"}], 
+   "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"x1", "=", "x"}], ";", 
+   RowBox[{"x2", "=", "y"}], ";", 
+   RowBox[{"x3", "=", "z"}], ";"}], "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{"Use", " ", "the", " ", "ADMBase", " ", "variable", " ", "names"}],
+    "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"g11", "=", "gxx"}], ";", 
+  RowBox[{"g12", "=", "gxy"}], ";", 
+  RowBox[{"g22", "=", "gyy"}], ";", 
+  RowBox[{"g13", "=", "gxz"}], ";", 
+  RowBox[{"g23", "=", "gyz"}], ";", 
+  RowBox[{"g33", "=", "gzz"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"K11", "=", "kxx"}], ";", 
+   RowBox[{"K12", "=", "kxy"}], ";", 
+   RowBox[{"K22", "=", "kyy"}], ";", 
+   RowBox[{"K13", "=", "kxz"}], ";", 
+   RowBox[{"K23", "=", "kyz"}], ";", 
+   RowBox[{"K33", "=", "kzz"}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+  "(*", "*****************************************************************************)"}\
+], 
+  RowBox[{"(*", "Expressions", "*)"}], 
+  RowBox[{
+  "(*", "*****************************************************************************)"}\
+], 
+  RowBox[{
+   RowBox[{"detgExpr", "=", 
+    RowBox[{"Det", "[", 
+     RowBox[{"MatrixOfComponents", "[", 
+      RowBox[{"g", "[", 
+       RowBox[{"la", ",", "lb"}], "]"}], "]"}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+  "(*", "*****************************************************************************)"}\
+], 
+  RowBox[{"(*", "Groups", "*)"}], 
+  RowBox[{
+  "(*", "*****************************************************************************)"}\
+], 
+  RowBox[{
+   RowBox[{"evolvedGroups", "=", 
+    RowBox[{"{", "}"}]}], ";"}]}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evaluatedGroups", "=", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"SetGroupName", "[", 
+       RowBox[{
+        RowBox[{"CreateGroupFromTensor", "[", "BRI", "]"}], ",", 
+        RowBox[{"prefix", "<>", "\"\<I\>\""}]}], "]"}], ",", 
+      RowBox[{"SetGroupName", "[", 
+       RowBox[{
+        RowBox[{"CreateGroupFromTensor", "[", "BRII", "]"}], ",", 
+        RowBox[{"prefix", "<>", "\"\<II\>\""}]}], "]"}], ",", 
+      RowBox[{"SetGroupName", "[", 
+       RowBox[{
+        RowBox[{"CreateGroupFromTensor", "[", "V", "]"}], ",", 
+        RowBox[{"prefix", "<>", "\"\<V\>\""}]}], "]"}]}], "}"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"evaluatedGroups", "=", 
+   RowBox[{"Map", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Append", "[", 
+       RowBox[{"#", ",", 
+        RowBox[{"Timelevels", "\[Rule]", "3"}]}], "]"}], "&"}], ",", 
+     "evaluatedGroups"}], "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"declaredGroups", "=", 
+   RowBox[{"Join", "[", 
+    RowBox[{"evolvedGroups", ",", "evaluatedGroups"}], "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"declaredGroupNames", "=", 
+    RowBox[{"Map", "[", 
+     RowBox[{"First", ",", "declaredGroups"}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"extraGroups", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"\"\<Grid::coordinates\>\"", ",", 
+       RowBox[{"{", 
+        RowBox[{"x", ",", "y", ",", "z", ",", "r"}], "}"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"\"\<ADMBase::metric\>\"", ",", 
+       RowBox[{"{", 
+        RowBox[{
+        "gxx", ",", "gxy", ",", "gxz", ",", "gyy", ",", "gyz", ",", "gzz"}], 
+        "}"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"\"\<ADMBase::curv\>\"", ",", 
+       RowBox[{"{", 
+        RowBox[{
+        "kxx", ",", "kxy", ",", "kxz", ",", "kyy", ",", "kyz", ",", "kzz"}], 
+        "}"}]}], "}"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"groups", "=", 
+    RowBox[{"Join", "[", 
+     RowBox[{"declaredGroups", ",", "extraGroups"}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+  "(*", "*****************************************************************************)"}\
+], 
+  RowBox[{"(*", 
+   RowBox[{"Constraint", " ", "equations"}], "*)"}], 
+  RowBox[{
+  "(*", "*****************************************************************************)"}\
+], 
+  RowBox[{
+   RowBox[{"BackReactionCalc", "=", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"Name", "\[Rule]", 
+       RowBox[{"BackReaction", "<>", "\"\<_Calc\>\""}]}], ",", 
+      RowBox[{"Schedule", "\[Rule]", "Automatic"}], ",", 
+      RowBox[{"Where", "\[Rule]", "Interior"}], ",", 
+      RowBox[{"Shorthands", "\[Rule]", 
+       RowBox[{"{", 
+        RowBox[{"detg", ",", 
+         RowBox[{"gu", "[", 
+          RowBox[{"ua", ",", "ub"}], "]"}], ",", 
+         RowBox[{"R", "[", 
+          RowBox[{"la", ",", "lb"}], "]"}], ",", "trR", ",", 
+         RowBox[{"Km", "[", 
+          RowBox[{"ua", ",", "lb"}], "]"}], ",", "trK", ",", "rho", ",", 
+         RowBox[{"S", "[", "la", "]"}]}], "}"}]}], ",", 
+      RowBox[{"Equations", "\[Rule]", 
+       RowBox[{"{", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"detg", "\[Rule]", "detgExpr"}], ",", "\[IndentingNewLine]", 
+         
+         RowBox[{
+          RowBox[{"gu", "[", 
+           RowBox[{"ua", ",", "ub"}], "]"}], "\[Rule]", " ", 
+          RowBox[{"MatrixInverse", "[", 
+           RowBox[{"g", "[", 
+            RowBox[{"ua", ",", "ub"}], "]"}], "]"}]}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"Km", "[", 
+           RowBox[{"ua", ",", "lb"}], "]"}], "\[Rule]", 
+          RowBox[{
+           RowBox[{"gu", "[", 
+            RowBox[{"ua", ",", "uc"}], "]"}], " ", 
+           RowBox[{"K", "[", 
+            RowBox[{"lc", ",", "lb"}], "]"}]}]}], ",", "\[IndentingNewLine]", 
+         
+         RowBox[{"trK", "\[Rule]", 
+          RowBox[{"Km", "[", 
+           RowBox[{"ua", ",", "la"}], "]"}]}], ",", "\[IndentingNewLine]", 
+         RowBox[{"trKD", "\[Rule]", 
+          RowBox[{
+           RowBox[{"Sqrt", "[", "detg", "]"}], " ", "trK"}]}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{"trK2D", "\[Rule]", " ", 
+          RowBox[{
+           RowBox[{"Sqrt", "[", "detg", "]"}], " ", "trK", " ", "trK"}]}], 
+         ",", "\[IndentingNewLine]", 
+         RowBox[{"A", " ", "\[Rule]", " ", 
+          RowBox[{"K", "-", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"trK", "/", "3"}], ")"}], " ", "g"}]}]}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{"Au", "\[Rule]", " ", "\[IndentingNewLine]", 
+          RowBox[{"A2", "\[Rule]", 
+           RowBox[{
+            RowBox[{"Sqrt", "[", "detg", "]"}], " ", 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"trK", " ", "trK"}], "-", 
+               RowBox[{
+                RowBox[{"Km", "[", 
+                 RowBox[{"ua", ",", "lb"}], "]"}], " ", 
+                RowBox[{"Km", "[", 
+                 RowBox[{"ub", ",", "la"}], "]"}]}]}], ")"}], "/", 
+             "2"}]}]}]}], ",", "\[IndentingNewLine]", 
+         RowBox[{"V", "\[Rule]", 
+          RowBox[{"Sqrt", "[", "detg", "]"}]}]}], "}"}]}]}], "}"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+  "(*", "*****************************************************************************)"}\
+], 
+  RowBox[{"(*", "Implementations", "*)"}], 
+  RowBox[{
+  "(*", "*****************************************************************************)"}\
+], 
+  RowBox[{
+   RowBox[{"inheritedImplementations", "=", 
+    RowBox[{"{", "\"\<ADMBase\>\"", "}"}]}], ";"}], "\n", 
+  "\[IndentingNewLine]", 
+  RowBox[{
+  "(*", "*****************************************************************************)"}\
+], "\[IndentingNewLine]", 
+  RowBox[{"(*", "Parameters", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+  "(*", "*****************************************************************************)"}\
+], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+  "(*", "*****************************************************************************)"}\
+], 
+  RowBox[{"(*", 
+   RowBox[{"Construct", " ", "the", " ", "thorns"}], "*)"}], 
+  RowBox[{
+  "(*", "*****************************************************************************)"}\
+], 
+  RowBox[{"calculations", "=", 
+   RowBox[{"{", "BackReactionCalc", "}"}]}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"CreateKrancThornTT", "[", 
+    RowBox[{"groups", ",", "\"\<.\>\"", ",", "Tname", ",", 
+     RowBox[{"Calculations", "\[Rule]", "calculations"}], ",", 
+     RowBox[{"DeclaredGroups", "\[Rule]", "declaredGroupNames"}], ",", 
+     RowBox[{"UseLoopControl", "\[Rule]", "True"}], ",", 
+     RowBox[{
+     "InheritedImplementations", "\[Rule]", "inheritedImplementations"}], ",", 
+     RowBox[{"MergeFiles", "\[Rule]", "\"\<overlay/BReact\>\""}]}], "]"}], 
+   ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+  "(*", "*****************************************************************************)"}\
+], 
+  RowBox[{"(*", "Options", "*)"}], 
+  RowBox[{
+  "(*", "*****************************************************************************)"}\
+], 
+  RowBox[{
+   RowBox[{"createCode", "[", "4", "]"}], ";"}]}]}], "Input",
+ CellChangeTimes->{{3.791280231621867*^9, 3.791280352234524*^9}, {
+  3.7912804152622232`*^9, 3.7912804526303797`*^9}, {3.791280598742436*^9, 
+  3.791280825839774*^9}, {3.791280862743496*^9, 3.791280997841899*^9}, {
+  3.791281091360982*^9, 3.791281140695403*^9}, {3.791281179561479*^9, 
+  3.7912811818965397`*^9}, {3.791281316874322*^9, 3.791281380278759*^9}, {
+  3.791281411252261*^9, 3.7912814133558083`*^9}, {3.791281651532214*^9, 
+  3.791281659074934*^9}, {3.7912817363016863`*^9, 
+  3.791281896021255*^9}},ExpressionUUID->"225f87b2-fae3-427e-a371-\
+f343729f2d5a"]
+},
+WindowSize->{808, 911},
+WindowMargins->{{127, Automatic}, {70, Automatic}},
+FrontEndVersion->"12.0 for Linux x86 (64-bit) (April 8, 2019)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 11525, 310, 1872, "Input",ExpressionUUID->"225f87b2-fae3-427e-a371-f343729f2d5a"]
+}
+]
+*)
+
+(* End of internal cache information *)
+

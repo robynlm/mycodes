@@ -1,0 +1,13 @@
+To generate the code:
+
+in m/
+>> make Dust
+
+I got the error:
+> cc: error trying to exec 'cc1obj': execvp: No such file or directory
+I solved it with:
+>> sudo yum update
+>> sudo yum install gcc-c++
+>> sudo yum install gcc-objc
+
+

@@ -1,0 +1,296 @@
+######################################
+# Flesh parameters
+######################################
+
+Cactus::cctk_run_title = "Evolution of the Eistein-de Sitter model"
+
+Cactus::cctk_full_warnings         = yes
+Cactus::highlight_warning_messages = no
+Cactus::cctk_timer_output          = "off"
+
+Cactus::terminate       = "any"
+Cactus::cctk_initial_time = 1
+Cactus::cctk_final_time = 5
+Cactus::cctk_itlast     = 1000000
+
+#############################################################################################
+ActiveThorns = "Boundary CartGrid3D CoordBase Slab SymBase PeriodicCarpet"
+#############################################################################################
+
+CoordBase::domainsize = "minmax"
+
+CoordBase::xmin =  -3
+CoordBase::ymin =  -3
+CoordBase::zmin =  -3
+CoordBase::xmax =  +3
+CoordBase::ymax =  +3
+CoordBase::zmax =  +3
+CoordBase::dx   =  0.1
+CoordBase::dy   =  0.1
+CoordBase::dz   =  0.1
+
+CoordBase::boundary_size_x_lower     = 3
+CoordBase::boundary_size_y_lower     = 3
+CoordBase::boundary_size_z_lower     = 3
+CoordBase::boundary_size_x_upper     = 3
+CoordBase::boundary_size_y_upper     = 3
+CoordBase::boundary_size_z_upper     = 3
+
+CoordBase::boundary_shiftout_x_lower = 1
+CoordBase::boundary_shiftout_y_lower = 1
+CoordBase::boundary_shiftout_z_lower = 1
+CoordBase::boundary_shiftout_x_upper = 0
+CoordBase::boundary_shiftout_y_upper = 0
+CoordBase::boundary_shiftout_z_upper = 0
+
+CartGrid3D::type = "coordbase"
+
+PeriodicCarpet::periodic   = "yes"
+
+##################################################################################
+ActiveThorns = "IOUtil Carpet CarpetLib CarpetInterp LoopControl CarpetReduce CarpetSlab"
+##################################################################################
+
+Carpet::init_fill_timelevels = "yes"
+
+Carpet::domain_from_coordbase = yes
+Carpet::max_refinement_levels = 1
+
+driver::ghost_size       = 3
+Carpet::use_buffer_zones = yes
+
+Carpet::prolongation_order_space = 5
+Carpet::prolongation_order_time  = 2
+
+Carpet::poison_new_timelevels = yes
+CarpetLib::poison_new_memory  = yes
+
+CarpetLib::max_allowed_memory_MB = 12288
+
+##################################################################
+ActiveThorns = "SphericalSurface ADMBase CarpetRegrid2"
+##################################################################
+
+Carpet::grid_structure_filename = "grid_structure.asc"
+Carpet::grid_coordinates_filename = "grid_coordinates.asc"
+
+CarpetRegrid2::num_centres  = 1
+CarpetRegrid2::num_levels_1 = 1
+#CarpetRegrid2::radius_1[1]  = 3
+CarpetRegrid2::symmetry_periodic_x = "yes"
+CarpetRegrid2::symmetry_periodic_y = "yes"
+CarpetRegrid2::symmetry_periodic_z = "yes"
+
+#################################
+ActiveThorns = "AEILocalInterp"
+ActiveThorns = "BLAS LAPACK"
+ActiveThorns = "Fortran"
+ActiveThorns = "GenericFD"
+ActiveThorns = "HDF5"
+ActiveThorns = "InitBase"
+ActiveThorns = "LocalInterp"
+ActiveThorns = "TGRtensor"
+#################################
+
+InitBase::initial_data_setup_method = "init_single_level"
+
+#################################
+ActiveThorns = "MoL Time"
+#################################
+
+MoL::ODE_Method             = "RK4"
+MoL::MoL_Intermediate_Steps = 4
+MoL::MoL_Num_Scratch_Levels = 1
+
+Time::dtfac   = 0.4
+
+
+###################################################################################################
+ActiveThorns = "ADMCoupling ADMMacros CoordGauge SpaceMask StaticConformal TmunuBase ML_BSSN ML_BSSN_Helper CT_Dust"
+###################################################################################################
+
+ADMMacros::spatial_order = 4
+ADMBase::metric_timelevels = 3
+ADMBase::lapse_timelevels = 3
+ADMBase::shift_timelevels = 3
+
+ADMBase::initial_data    = "CT_Dust"
+ADMBase::initial_lapse   = "one"
+ADMBase::initial_shift   = "zero"
+ADMBase::initial_dtlapse = "zero"
+ADMBase::initial_dtshift = "zero"
+
+ADMBase::evolution_method       = "ML_BSSN"
+ADMBase::lapse_evolution_method = "ML_BSSN"
+ADMBase::shift_evolution_method = "ML_BSSN"
+ADMBase::dtlapse_evolution_method = "static"
+ADMBase::dtshift_evolution_method = "static"
+
+ML_BSSN::conformalMethod     = 1      # W evolution
+
+ML_BSSN::harmonicN           = 1      # 1+log
+ML_BSSN::harmonicF           = 0.0    # 1+log
+ML_BSSN::ShiftGammaCoeff     = 0.0
+ML_BSSN::BetaDriver          = 1.0
+ML_BSSN::advectLapse         = 1.0
+ML_BSSN::advectShift         = 1.0
+
+ML_BSSN::MinimumLapse        = 1.0e-8
+
+ML_BSSN::ML_log_confac_bound = "none"
+ML_BSSN::ML_metric_bound     = "none"
+ML_BSSN::ML_Gamma_bound      = "none"
+ML_BSSN::ML_trace_curv_bound = "none"
+ML_BSSN::ML_curv_bound       = "none"
+ML_BSSN::ML_lapse_bound      = "none"
+ML_BSSN::ML_dtlapse_bound    = "none"
+ML_BSSN::ML_shift_bound      = "none"
+ML_BSSN::ML_dtshift_bound    = "none"
+
+TmunuBase::stress_energy_storage = "yes"
+TmunuBase::stress_energy_at_RHS  = "yes"
+
+CT_Dust::coupling = "yes"
+CT_Dust::my_initial_data = "pFLRW"
+CT_Dust::pflrw_omegaM = 1
+CT_Dust::pflrw_H0     = 0.6666666666666667
+CT_Dust::pflrw_a0     = 1
+CT_Dust::pflrw_kx[0]  = 1.0471975511965976
+CT_Dust::pflrw_ky[0]  = 1.0471975511965976
+CT_Dust::pflrw_kz[0]  = 1.0471975511965976
+CT_Dust::pflrw_ax[0]  = 0.01
+CT_Dust::pflrw_ay[0]  = 0.01
+CT_Dust::pflrw_az[0]  = 0.01
+
+#################################
+ActiveThorns = "CT_MultiLevel CT_Analytic"
+#################################
+CT_MultiLevel::cycle_type          = "FMG cycle"
+CT_MultiLevel::tol                 = 1e-12
+CT_MultiLevel::omega               = 1
+CT_MultiLevel::fd_order            = 4
+CT_MultiLevel::fill_ADM            = "yes"
+CT_MultiLevel::fill_Aij            = "Solver"
+CT_MultiLevel::nrelsteps_down      = 10
+CT_MultiLevel::nrelsteps_up        = 10
+CT_MultiLevel::nrelsteps_bottom    = 300
+CT_MultiLevel::nrelsteps_top       = 10
+CT_MultiLevel::topMGlevel          = 1
+CT_MultiLevel::number_of_equations = 1
+CT_MultiLevel::number_of_auxiliaries = 0
+
+CT_MultiLevel::reset_psi           = "to value"
+CT_MultiLevel::reset_value[0]      = 1
+CT_MultiLevel::enforce_int         = 1
+
+CT_MultiLevel::inipsi_gfname[0]    = "CT_Analytic::testinipsi"
+CT_MultiLevel::cxx_gfname[0]       = "CT_Analytic::testcxx"
+CT_MultiLevel::cyy_gfname[0]       = "CT_Analytic::testcyy"
+CT_MultiLevel::czz_gfname[0]       = "CT_Analytic::testczz"
+CT_MultiLevel::n0[0]               = 5
+CT_MultiLevel::c0_gfname[0]        = "CT_Analytic::testc0"
+CT_MultiLevel::n1[0]               = 5
+CT_MultiLevel::c1_gfname[0]        = "CT_Dust::cttS"
+
+CT_MultiLevel::model               = "Lump"
+CT_Analytic::free_data             = "Lump"
+CT_Analytic::Kc			   = -2
+
+#################################
+ActiveThorns = "Dissipation"
+#################################
+
+Dissipation::order = 5
+Dissipation::vars  = "
+        ML_BSSN::ML_log_confac
+        ML_BSSN::ML_metric
+        ML_BSSN::ML_trace_curv
+        ML_BSSN::ML_curv
+        ML_BSSN::ML_Gamma
+        ML_BSSN::ML_lapse
+        ML_BSSN::ML_shift
+        ML_BSSN::ML_dtlapse
+        ML_BSSN::ML_dtshift
+"
+
+#################################
+ActiveThorns = "NaNChecker"
+#################################
+
+NaNChecker::check_every = 1
+NaNChecker::report_max = 1
+NaNChecker::action_if_found = "terminate"
+NaNChecker::check_vars = "
+	ADMBase::lapse
+	ADMBase::shift
+	ADMBase::metric
+	ADMBase::curv
+	TmunuBase::eTtt
+"
+
+NaNChecker::verbose = "all"
+
+IO::out_dir = $parfile
+
+#################################
+ActiveThorns = "CarpetIOBasic"
+#################################
+# what appears on in the std_out
+IOBasic::outInfo_every      = 2
+IOBasic::outInfo_reductions = "average"
+IOBasic::outInfo_vars       = "
+	CT_Dust::rho
+        Carpet::physical_time_per_hour
+"
+
+#################################
+ActiveThorns = "CarpetIOScalar"
+#################################
+# print average, count, iaverage, icount, inorm1, inorm2
+# max, min, norm1, norm2, norm_inf, sum
+
+IOScalar::one_file_per_group = yes
+
+IOScalar::outScalar_every = 1
+IOScalar::outScalar_vars  = "
+	CT_Dust::rho
+        ADMBase::metric
+        ML_BSSN::ML_Ham
+        ML_BSSN::ML_Mom
+"
+IOScalar::outScalar_reductions = "average"
+
+#################################
+Activethorns = "CarpetIOHDF5"
+#################################
+# .h5 file
+IOHDF5::out_criterion = "divisor"
+IOHDF5::out_every          = 2
+IOHDF5::one_file_per_group = yes
+IOHDF5::compression_level  = 0
+IOHDF5::out_vars  = "
+	ADMBase::curv
+	CT_Dust::rho
+        ADMBase::metric
+"
+
+IOHDF5::checkpoint          = "yes"
+IO::checkpoint_ID           = "yes"
+IO::checkpoint_dir          = $parfile
+IO::checkpoint_every_walltime_hours = 0.05
+IO::checkpoint_on_terminate = "yes"
+IO::checkpoint_keep         = 2
+
+IO::recover     = "autoprobe"
+IO::recover_dir = $parfile
+
+#################################
+ActiveThorns = "Formaline"
+#################################
+
+#################################
+ActiveThorns = "TimerReport"
+#################################
+
+TimerReport::out_every    = 512
+TimerReport::out_filename = "TimerReport"

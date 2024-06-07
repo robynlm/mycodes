@@ -1,0 +1,49 @@
+#SCHEDULE CosmoLapse_dtLapse AT CCTK_PRESTEP
+#{
+#  LANG: C
+#  WRITES: ADMBase::dtalp(Everywhere)
+#} "Activate dtLapse"
+
+SCHEDULE CosmoLapse_dtLapse IN CCTK_INITIAL AFTER ICPertFLRW_ICCalc BEFORE CT_Dust_convertFromPrimitives
+{
+  LANG: Fortran
+  READS: ML_BSSN::alpha(Everywhere)
+  READS: ML_BSSN::trK(Everywhere)
+  WRITES: ADMBase::dtalp(Everywhere)
+  WRITES: ML_BSSN::A(Everywhere)
+  WRITES: ML_BSSN::alpharhs(Everywhere)
+  WRITES: ML_BSSN::Arhs(Everywhere)
+} "Activate dtLapse"
+
+SCHEDULE CosmoLapse_dtLapse AT initial AFTER ML_BSSN_InitialADMBase2Interior AFTER ML_BSSN_InitialADMBase2BoundaryScalar
+{
+  LANG: C
+  READS: ML_BSSN::alpha(Everywhere)
+  READS: ML_BSSN::trK(Everywhere)
+  WRITES: ADMBase::dtalp(Everywhere)
+  WRITES: ML_BSSN::A(Everywhere)
+  WRITES: ML_BSSN::alpharhs(Everywhere)
+  WRITES: ML_BSSN::Arhs(Everywhere)
+} "Activate dtLapse"
+
+SCHEDULE CosmoLapse_dtLapse IN MoL_PostStep AFTER ML_BSSN_ADMBaseInterior AFTER ML_BSSN_ADMBaseBoundaryScalar BEFORE ML_BSSN_ADMBaseEverywhere
+{
+  LANG: C
+  READS: ML_BSSN::alpha(Everywhere)
+  READS: ML_BSSN::trK(Everywhere)
+  WRITES: ADMBase::dtalp(Everywhere)
+  WRITES: ML_BSSN::A(Everywhere)
+  WRITES: ML_BSSN::alpharhs(Everywhere)
+  WRITES: ML_BSSN::Arhs(Everywhere)
+} "Activate dtLapse"
+
+SCHEDULE CosmoLapse_dtLapse IN MoL_PostRHS
+{
+  LANG: C
+  READS: ML_BSSN::alpha(Everywhere)
+  READS: ML_BSSN::trK(Everywhere)
+  WRITES: ADMBase::dtalp(Everywhere)
+  WRITES: ML_BSSN::A(Everywhere)
+  WRITES: ML_BSSN::alpharhs(Everywhere)
+  WRITES: ML_BSSN::Arhs(Everywhere)
+} "Activate dtLapse"

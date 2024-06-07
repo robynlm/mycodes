@@ -1,0 +1,14 @@
+SCHEDULE dtCalc AT CCTK_BASEGRID AFTER Time_Initialise BEFORE TemporalSpacings
+{
+  LANG: C
+  OPTIONS: GLOBAL
+  WRITES: Time::speedvars
+} "Activate dtCalc"
+
+SCHEDULE dtCalc AT POSTSTEP BEFORE TemporalSpacings
+{
+  LANG: C
+  OPTIONS: GLOBAL
+  WRITES: Time::speedvars
+} "Activate dtCalc"
+

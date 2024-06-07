@@ -1,0 +1,18 @@
+#! /bin/bash
+#SBATCH --partition @QUEUE@
+#SBATCH --time=@WALLTIME@
+#SBATCH --nodes=@NODES@
+#SBATCH --ntasks=@NUM_PROCS@
+#SBATCH --cpus-per-task=@NUM_THREADS@
+#SBATCH --export=ALL
+#SBATCH --job-name=@SHORT_SIMULATION_NAME@
+#SBATCH --out @RUNDIR@/@SIMULATION_NAME@.out
+#SBATCH --error @RUNDIR@/@SIMULATION_NAME@.err
+#SBATCH --exclude=148-171
+#SBATCH --exclusive=user
+
+#@ENVSETUP@
+export OMPI_MCA_mtl=^psm
+
+cd @SOURCEDIR@
+@SIMFACTORY@ run @SIMULATION_NAME@ --machine=@MACHINE@ --restart-id=@RESTART_ID@ @FROM_RESTART_COMMAND@

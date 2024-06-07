@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Replace Mathematica functions with calls to GSL
+sed -i -e 's/Hypergeometric2F1/gsl_sf_hyperg_2F1/g' -e $'16 a\\\n'"#include \"gsl/gsl_sf_hyperg.h\"" CT_Dust/src/CT_Dust_MB.cc
+sed -i -e 's/Hypergeometric2F1/gsl_sf_hyperg_2F1/g' -e $'16 a\\\n'"#include \"gsl/gsl_sf_hyperg.h\"" CT_Dust/src/CT_Dust_MB_bound.cc
+
+# Give 3 timelevels to certain terms in the Einstein constraints
+sed -i -e 's/CT_cttS type=GF timelevels=1/CT_cttS type=GF timelevels=3/' -e 's/CT_cttV type=GF timelevels=1/CT_cttV type=GF timelevels=3/' CT_Dust/interface.ccl
+sed -i -e 's/CT_cttS\[other_timelevels\]/CT_cttS[timelevels]/' -e 's/CT_cttV\[other_timelevels\]/CT_cttV[timelevels]/' CT_Dust/schedule.ccl

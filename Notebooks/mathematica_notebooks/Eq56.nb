@@ -1,0 +1,172 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      5015,        162]
+NotebookOptionsPosition[      4727,        149]
+NotebookOutlinePosition[      5061,        164]
+CellTagsIndexPosition[      5018,        161]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ FormBox[
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"4", " ", "Hconf", " ", "deltap"}], "+", 
+     RowBox[{"6", " ", 
+      RowBox[{"Hconf", "^", "2"}], " ", "Omegam", " ", "delta"}], "-", "R"}], 
+    "=", "0"}], "             ", 
+   RowBox[{"(*", 
+    RowBox[{"Eq", " ", "42"}], "*)"}]}], InputForm], "\n", 
+ FormBox[
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"4", " ", "Hconf", " ", "deltap"}], "+", 
+     RowBox[{"6", " ", 
+      RowBox[{"Hconf", "^", "2"}], " ", "Omegam", " ", "delta"}], "-", 
+     RowBox[{"4", " ", "ddRc"}]}], "=", "0"}], "        ", 
+   RowBox[{"(*", 
+    RowBox[{"Eq", " ", "33"}], "*)"}]}], InputForm], "\[IndentingNewLine]", 
+ FormBox[
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"4", " ", "Hconf", " ", "C1", " ", "Dpp"}], "+", 
+     RowBox[{"6", " ", 
+      RowBox[{"Hconf", "^", "2"}], " ", "Omegam", " ", "C1", " ", "Dp"}], "-", 
+     RowBox[{"4", " ", "ddRc"}]}], "=", "0"}], "        ", 
+   RowBox[{"(*", 
+    RowBox[{"Eq", " ", "48"}], "*)"}]}], InputForm], "\n", 
+ FormBox[
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"4", " ", 
+      RowBox[{"Hconf", "^", "2"}], " ", "C1", " ", "f", " ", "Dp"}], "+", 
+     RowBox[{"6", " ", 
+      RowBox[{"Hconf", "^", "2"}], " ", "Omegam", " ", "C1", " ", "Dp"}], "-", 
+     RowBox[{"4", " ", "ddRc"}]}], "=", "0"}], "     ", 
+   RowBox[{"(*", 
+    RowBox[{"Eq", " ", "51"}], "*)"}]}], InputForm], "\n", 
+ FormBox[
+  RowBox[{
+   RowBox[{
+    RowBox[{"4", " ", 
+     RowBox[{"Hconf", "^", "2"}], " ", "C1", " ", "Dp", " ", 
+     RowBox[{"(", 
+      RowBox[{"f", "+", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"3", "/", "2"}], ")"}], " ", "Omegam"}]}], ")"}]}], "-", 
+    RowBox[{"4", " ", "ddRc"}]}], "=", "0"}], InputForm], "\n", 
+ FormBox[
+  RowBox[{
+   RowBox[{
+    RowBox[{"Hconf", "^", "2"}], " ", "C1", " ", "Dp", " ", "F"}], "=", 
+   "ddRc"}], InputForm], "\n", 
+ FormBox[
+  RowBox[{
+   RowBox[{"C1", " ", "Dp"}], "=", 
+   RowBox[{"ddRc", "/", 
+    RowBox[{"(", 
+     RowBox[{"F", " ", 
+      RowBox[{"Hconf", "^", "2"}]}], ")"}]}]}], InputForm], "\n", 
+ FormBox[
+  RowBox[{
+   RowBox[{"delta", "=", 
+    RowBox[{"ddRc", "/", 
+     RowBox[{"(", 
+      RowBox[{"F", " ", 
+       RowBox[{"Hconf", "^", "2"}]}], ")"}]}]}], 
+   "                                ", 
+   RowBox[{"(*", 
+    RowBox[{"Eq", " ", "56"}], "*)"}], "\[IndentingNewLine]"}], 
+  InputForm], "\[IndentingNewLine]", 
+ FormBox[
+  RowBox[{
+   RowBox[{"V", " ", "=", " ", 
+    RowBox[{"-", "deltap"}]}], "                                           ", 
+   
+   RowBox[{"(*", 
+    RowBox[{"Eq", " ", "38"}], "*)"}]}], InputForm], "\[IndentingNewLine]", 
+ FormBox[
+  RowBox[{
+   RowBox[{"V", " ", "=", " ", 
+    RowBox[{
+     RowBox[{"-", "C1"}], " ", "Dpp"}]}], 
+   "                                           ", 
+   RowBox[{"(*", 
+    RowBox[{"Eq", " ", "48"}], "*)"}]}], InputForm], "\[IndentingNewLine]", 
+ FormBox[
+  RowBox[{
+   RowBox[{"V", " ", "=", " ", 
+    RowBox[{
+     RowBox[{"-", "C1"}], " ", "f", " ", "Hconf", " ", "Dp"}]}], 
+   "                                    ", 
+   RowBox[{"(*", 
+    RowBox[{"Eq", " ", "51"}], "*)"}]}], InputForm], "\[IndentingNewLine]", 
+ FormBox[
+  RowBox[{
+   RowBox[{"V", " ", "=", " ", 
+    RowBox[{
+     RowBox[{"-", "f"}], " ", "Hconf", " ", 
+     RowBox[{"ddRc", "/", 
+      RowBox[{"(", 
+       RowBox[{"F", " ", 
+        RowBox[{"Hconf", "^", "2"}]}], ")"}]}]}]}], 
+   "                         ", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Eq", " ", "48"}], " ", "&"}], " ", "56"}], "*)"}]}], 
+  InputForm], "\[IndentingNewLine]", 
+ FormBox[
+  RowBox[{"V", " ", "=", " ", 
+   RowBox[{
+    RowBox[{"-", "f"}], " ", 
+    RowBox[{"ddRc", "/", 
+     RowBox[{"(", 
+      RowBox[{"F", " ", "Hconf"}], ")"}], "                                 ", 
+     RowBox[{"(*", 
+      RowBox[{"Eq", " ", "57"}], "*)"}]}]}]}], InputForm]}], "Input",
+ CellChangeTimes->{{3.802491245507597*^9, 3.802491373220379*^9}, {
+  3.8024914167605543`*^9, 3.8024914982779903`*^9}, {3.802491574893847*^9, 
+  3.802491621728511*^9}, {3.802491666977253*^9, 
+  3.802492092817831*^9}},ExpressionUUID->"7be291a4-e3e4-4132-a349-\
+481d42a75d94"]
+},
+WindowSize->{808, 621},
+WindowMargins->{{279, Automatic}, {3, Automatic}},
+FrontEndVersion->"12.0 for Linux x86 (64-bit) (April 8, 2019)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 4165, 127, 279, "Input",ExpressionUUID->"7be291a4-e3e4-4132-a349-481d42a75d94"]
+}
+]
+*)
+
+(* End of internal cache information *)
+

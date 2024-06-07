@@ -1,0 +1,21 @@
+
+ActiveThorns = "Time CartGrid3D CoordBase"
+ActiveThorns = "Slab SymBase PeriodicCarpet"
+ActiveThorns = "SpaceMask CoordGauge Carpet"
+ActiveThorns = "CarpetLib CarpetInterp CarpetReduce"
+ActiveThorns = "CarpetSlab InitBase"
+ActiveThorns = "ICPertFLRW_GRH ADMBase ADMMacros"
+ActiveThorns = "ADMCoupling StaticConformal HydroBase"
+ActiveThorns = "TmunuBase EOS_Omni MoL"
+ActiveThorns = "ML_BSSN ML_BSSN_Helper CosmoLapse"
+ActiveThorns = "AEILocalInterp GenericFD LocalReduce"
+ActiveThorns = "LoopControl GRHydro CarpetIOBasic"
+ActiveThorns = "CarpetIOScalar CarpetIOASCII CarpetIOHDF5"
+ActiveThorns = "NaNChecker"
+
+IO::recover     = "auto"
+IO::recover_dir = "/mnt/lustre2/ET_sims/testcheck/output-0000/testcheck/"
+IO::recover_file = "checkpoint.chkpt"
+IO::out_fileinfo = "none"
+IO::new_filename_scheme = "no"
+

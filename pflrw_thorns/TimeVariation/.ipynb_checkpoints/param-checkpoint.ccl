@@ -1,0 +1,13 @@
+SHARES: Time
+USES REAL dtfac
+USES REAL courant_fac
+USES BOOLEAN verbose
+
+SHARES: Cactus
+USES REAL cctk_initial_time
+
+SHARES: ICPertFLRW
+USES REAL ICPertFLRW_h
+USES REAL ICPertFLRW_c
+USES REAL ICPertFLRW_Omega_matter0
+USES STRING ICPertFLRW_Lambda

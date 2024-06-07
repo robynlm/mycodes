@@ -1,0 +1,452 @@
+# File produced by Kranc
+
+STORAGE: CT_D[timelevels]
+
+STORAGE: CT_E[timelevels]
+
+STORAGE: CT_S[timelevels]
+
+STORAGE: CT_Theta[other_timelevels]
+
+STORAGE: CT_sigmatt[other_timelevels]
+
+STORAGE: CT_sigmats[other_timelevels]
+
+STORAGE: CT_sigmass[other_timelevels]
+
+STORAGE: CT_Drhs[rhs_timelevels]
+
+STORAGE: CT_Erhs[rhs_timelevels]
+
+STORAGE: CT_Srhs[rhs_timelevels]
+schedule CT_Dust_Startup at STARTUP
+{
+  LANG: C
+  OPTIONS: meta
+} "create banner"
+
+schedule CT_Dust_RegisterSymmetries in SymmetryRegister
+{
+  LANG: C
+  OPTIONS: meta
+} "register symmetries"
+
+if (CCTK_EQUALS(my_initial_data, "Minkowski"))
+{
+  schedule CT_Dust_Minkowski IN HydroBase_Initial
+  {
+    LANG: C
+    WRITES: ADMBase::alp(Everywhere)
+    WRITES: ADMBase::betax(Everywhere)
+    WRITES: ADMBase::betay(Everywhere)
+    WRITES: ADMBase::betaz(Everywhere)
+    WRITES: HydroBase::eps(Everywhere)
+    WRITES: ADMBase::gxx(Everywhere)
+    WRITES: ADMBase::gxy(Everywhere)
+    WRITES: ADMBase::gxz(Everywhere)
+    WRITES: ADMBase::gyy(Everywhere)
+    WRITES: ADMBase::gyz(Everywhere)
+    WRITES: ADMBase::gzz(Everywhere)
+    WRITES: ADMBase::kxx(Everywhere)
+    WRITES: ADMBase::kxy(Everywhere)
+    WRITES: ADMBase::kxz(Everywhere)
+    WRITES: ADMBase::kyy(Everywhere)
+    WRITES: ADMBase::kyz(Everywhere)
+    WRITES: ADMBase::kzz(Everywhere)
+    WRITES: HydroBase::press(Everywhere)
+    WRITES: HydroBase::rho(Everywhere)
+    WRITES: HydroBase::vel(Everywhere)
+    
+    
+    WRITES: HydroBase::w_lorentz(Everywhere)
+  } "CT_Dust_Minkowski"
+}
+
+if (CCTK_EQUALS(my_initial_data, "FLRW"))
+{
+  schedule CT_Dust_FLRW IN HydroBase_Initial
+  {
+    LANG: C
+    WRITES: ADMBase::alp(Everywhere)
+    WRITES: ADMBase::betax(Everywhere)
+    WRITES: ADMBase::betay(Everywhere)
+    WRITES: ADMBase::betaz(Everywhere)
+    WRITES: HydroBase::eps(Everywhere)
+    WRITES: ADMBase::gxx(Everywhere)
+    WRITES: ADMBase::gxy(Everywhere)
+    WRITES: ADMBase::gxz(Everywhere)
+    WRITES: ADMBase::gyy(Everywhere)
+    WRITES: ADMBase::gyz(Everywhere)
+    WRITES: ADMBase::gzz(Everywhere)
+    WRITES: ADMBase::kxx(Everywhere)
+    WRITES: ADMBase::kxy(Everywhere)
+    WRITES: ADMBase::kxz(Everywhere)
+    WRITES: ADMBase::kyy(Everywhere)
+    WRITES: ADMBase::kyz(Everywhere)
+    WRITES: ADMBase::kzz(Everywhere)
+    WRITES: HydroBase::press(Everywhere)
+    WRITES: HydroBase::rho(Everywhere)
+    WRITES: HydroBase::vel(Everywhere)
+    
+    
+    WRITES: HydroBase::w_lorentz(Everywhere)
+  } "CT_Dust_FLRW"
+}
+
+if (CCTK_EQUALS(formalism, "Wilson"))
+{
+  schedule CT_Dust_convertFromPrimitives IN HydroBase_Prim2ConInitial
+  {
+    LANG: C
+    READS: ADMBase::alp(Everywhere)
+    READS: ADMBase::gxx(Everywhere)
+    READS: ADMBase::gxy(Everywhere)
+    READS: ADMBase::gxz(Everywhere)
+    READS: ADMBase::gyy(Everywhere)
+    READS: ADMBase::gyz(Everywhere)
+    READS: ADMBase::gzz(Everywhere)
+    READS: HydroBase::eps(Everywhere)
+    READS: HydroBase::rho(Everywhere)
+    READS: HydroBase::vel(Everywhere)
+    
+    
+    READS: HydroBase::w_lorentz(Everywhere)
+    WRITES: CT_Dust::DD(Everywhere)
+    WRITES: CT_Dust::EE(Everywhere)
+    WRITES: CT_Dust::SS1(Everywhere)
+    WRITES: CT_Dust::SS2(Everywhere)
+    WRITES: CT_Dust::SS3(Everywhere)
+  } "CT_Dust_convertFromPrimitives"
+}
+
+if (CCTK_EQUALS(formalism, "Valencia"))
+{
+  schedule CT_Dust_convertFromPrimitivesVal IN HydroBase_Prim2ConInitial
+  {
+    LANG: C
+    READS: ADMBase::gxx(Everywhere)
+    READS: ADMBase::gxy(Everywhere)
+    READS: ADMBase::gxz(Everywhere)
+    READS: ADMBase::gyy(Everywhere)
+    READS: ADMBase::gyz(Everywhere)
+    READS: ADMBase::gzz(Everywhere)
+    READS: HydroBase::eps(Everywhere)
+    READS: HydroBase::press(Everywhere)
+    READS: HydroBase::rho(Everywhere)
+    READS: HydroBase::vel(Everywhere)
+    
+    
+    WRITES: CT_Dust::DD(Everywhere)
+    WRITES: CT_Dust::EE(Everywhere)
+    WRITES: CT_Dust::SS1(Everywhere)
+    WRITES: CT_Dust::SS2(Everywhere)
+    WRITES: CT_Dust::SS3(Everywhere)
+    WRITES: HydroBase::w_lorentz(Everywhere)
+  } "CT_Dust_convertFromPrimitivesVal"
+}
+
+if (CCTK_EQUALS(formalism, "Wilson"))
+{
+  schedule CT_Dust_RHS IN HydroBase_RHS
+  {
+    LANG: C
+    READS: ADMBase::kxx(Everywhere)
+    READS: ADMBase::kxy(Everywhere)
+    READS: ADMBase::kxz(Everywhere)
+    READS: ADMBase::kyy(Everywhere)
+    READS: ADMBase::kyz(Everywhere)
+    READS: ADMBase::kzz(Everywhere)
+    READS: ADMBase::alp(Everywhere)
+    READS: ADMBase::gxx(Everywhere)
+    READS: ADMBase::gxy(Everywhere)
+    READS: ADMBase::gxz(Everywhere)
+    READS: ADMBase::gyy(Everywhere)
+    READS: ADMBase::gyz(Everywhere)
+    READS: ADMBase::gzz(Everywhere)
+    READS: ADMBase::betax(Everywhere)
+    READS: ADMBase::betay(Everywhere)
+    READS: ADMBase::betaz(Everywhere)
+    READS: HydroBase::eps(Everywhere)
+    READS: HydroBase::press(Everywhere)
+    READS: HydroBase::rho(Everywhere)
+    READS: HydroBase::vel(Everywhere)
+    
+    
+    READS: HydroBase::w_lorentz(Everywhere)
+    READS: CT_Dust::DD(Everywhere)
+    READS: CT_Dust::EE(Everywhere)
+    READS: CT_Dust::SS1(Everywhere)
+    READS: CT_Dust::SS2(Everywhere)
+    READS: CT_Dust::SS3(Everywhere)
+    WRITES: CT_Dust::DDrhs(Interior)
+    WRITES: CT_Dust::EErhs(Interior)
+    WRITES: CT_Dust::SS1rhs(Interior)
+    WRITES: CT_Dust::SS2rhs(Interior)
+    WRITES: CT_Dust::SS3rhs(Interior)
+  } "CT_Dust_RHS"
+}
+
+if (CCTK_EQUALS(formalism, "Valencia"))
+{
+  schedule CT_Dust_RHSVal IN HydroBase_RHS
+  {
+    LANG: C
+    READS: ADMBase::kxx(Everywhere)
+    READS: ADMBase::kxy(Everywhere)
+    READS: ADMBase::kxz(Everywhere)
+    READS: ADMBase::kyy(Everywhere)
+    READS: ADMBase::kyz(Everywhere)
+    READS: ADMBase::kzz(Everywhere)
+    READS: ADMBase::alp(Everywhere)
+    READS: ADMBase::gxx(Everywhere)
+    READS: ADMBase::gxy(Everywhere)
+    READS: ADMBase::gxz(Everywhere)
+    READS: ADMBase::gyy(Everywhere)
+    READS: ADMBase::gyz(Everywhere)
+    READS: ADMBase::gzz(Everywhere)
+    READS: ADMBase::betax(Everywhere)
+    READS: ADMBase::betay(Everywhere)
+    READS: ADMBase::betaz(Everywhere)
+    READS: HydroBase::eps(Everywhere)
+    READS: HydroBase::press(Everywhere)
+    READS: HydroBase::rho(Everywhere)
+    READS: HydroBase::vel(Everywhere)
+    
+    
+    READS: HydroBase::w_lorentz(Everywhere)
+    READS: CT_Dust::EE(Everywhere)
+    READS: CT_Dust::SS1(Everywhere)
+    READS: CT_Dust::SS2(Everywhere)
+    READS: CT_Dust::SS3(Everywhere)
+    WRITES: CT_Dust::DDrhs(Interior)
+    WRITES: CT_Dust::EErhs(Interior)
+    WRITES: CT_Dust::SS1rhs(Interior)
+    WRITES: CT_Dust::SS2rhs(Interior)
+    WRITES: CT_Dust::SS3rhs(Interior)
+  } "CT_Dust_RHSVal"
+}
+
+schedule CT_Dust_InitRHS IN HydroBase_RHS BEFORE CT_Dust_RHS
+{
+  LANG: C
+  WRITES: CT_Dust::DDrhs(Everywhere)
+  WRITES: CT_Dust::EErhs(Everywhere)
+  WRITES: CT_Dust::SS1rhs(Everywhere)
+  WRITES: CT_Dust::SS2rhs(Everywhere)
+  WRITES: CT_Dust::SS3rhs(Everywhere)
+} "CT_Dust_InitRHS"
+
+if (CCTK_EQUALS(my_rhs_boundary_condition, "static"))
+{
+  schedule CT_Dust_RHSStaticBoundary IN HydroBase_Boundaries
+  {
+    LANG: C
+    SYNC: CT_Drhs
+    SYNC: CT_Erhs
+    SYNC: CT_Srhs
+    WRITES: CT_Dust::DDrhs(Boundary)
+    WRITES: CT_Dust::EErhs(Boundary)
+    WRITES: CT_Dust::SS1rhs(Boundary)
+    WRITES: CT_Dust::SS2rhs(Boundary)
+    WRITES: CT_Dust::SS3rhs(Boundary)
+  } "CT_Dust_RHSStaticBoundary"
+}
+
+if (CCTK_EQUALS(my_boundary_condition, "Minkowski"))
+{
+  schedule CT_Dust_boundary IN HydroBase_Boundaries
+  {
+    LANG: C
+    SYNC: CT_D
+    SYNC: CT_E
+    SYNC: CT_S
+    WRITES: CT_Dust::DD(Boundary)
+    WRITES: CT_Dust::EE(Boundary)
+    WRITES: CT_Dust::SS1(Boundary)
+    WRITES: CT_Dust::SS2(Boundary)
+    WRITES: CT_Dust::SS3(Boundary)
+  } "CT_Dust_boundary"
+}
+
+if (CCTK_EQUALS(formalism, "Wilson"))
+{
+  schedule CT_Dust_convertToPrimitives IN HydroBase_Con2Prim
+  {
+    LANG: C
+    READS: ADMBase::gxx(Everywhere)
+    READS: ADMBase::gxy(Everywhere)
+    READS: ADMBase::gxz(Everywhere)
+    READS: ADMBase::gyy(Everywhere)
+    READS: ADMBase::gyz(Everywhere)
+    READS: ADMBase::gzz(Everywhere)
+    READS: CT_Dust::DD(Everywhere)
+    READS: CT_Dust::EE(Everywhere)
+    READS: CT_Dust::SS1(Everywhere)
+    READS: CT_Dust::SS2(Everywhere)
+    READS: CT_Dust::SS3(Everywhere)
+    WRITES: HydroBase::eps(Everywhere)
+    WRITES: HydroBase::press(Everywhere)
+    WRITES: HydroBase::rho(Everywhere)
+    WRITES: HydroBase::vel(Everywhere)
+    
+    
+    WRITES: HydroBase::w_lorentz(Everywhere)
+  } "CT_Dust_convertToPrimitives"
+}
+
+if (CCTK_EQUALS(formalism, "Valencia"))
+{
+  schedule CT_Dust_convertToPrimitivesVal IN HydroBase_Con2Prim
+  {
+    LANG: C
+    READS: ADMBase::gxx(Everywhere)
+    READS: ADMBase::gxy(Everywhere)
+    READS: ADMBase::gxz(Everywhere)
+    READS: ADMBase::gyy(Everywhere)
+    READS: ADMBase::gyz(Everywhere)
+    READS: ADMBase::gzz(Everywhere)
+    READS: CT_Dust::EE(Everywhere)
+    READS: CT_Dust::SS1(Everywhere)
+    READS: CT_Dust::SS2(Everywhere)
+    READS: CT_Dust::SS3(Everywhere)
+    WRITES: HydroBase::eps(Everywhere)
+    WRITES: HydroBase::press(Everywhere)
+    WRITES: HydroBase::rho(Everywhere)
+    WRITES: HydroBase::vel(Everywhere)
+    
+    
+    WRITES: HydroBase::w_lorentz(Everywhere)
+  } "CT_Dust_convertToPrimitivesVal"
+}
+
+if (CCTK_EQUALS(coupling, "yes"))
+{
+  schedule CT_Dust_addToTmunu IN AddToTmunu
+  {
+    LANG: C
+    READS: ADMBase::alp(Everywhere)
+    READS: ADMBase::gxx(Everywhere)
+    READS: ADMBase::gxy(Everywhere)
+    READS: ADMBase::gxz(Everywhere)
+    READS: ADMBase::gyy(Everywhere)
+    READS: ADMBase::gyz(Everywhere)
+    READS: ADMBase::gzz(Everywhere)
+    READS: ADMBase::betax(Everywhere)
+    READS: ADMBase::betay(Everywhere)
+    READS: ADMBase::betaz(Everywhere)
+    READS: HydroBase::eps(Everywhere)
+    READS: HydroBase::press(Everywhere)
+    READS: HydroBase::rho(Everywhere)
+    READS: HydroBase::vel(Everywhere)
+    
+    
+    READS: HydroBase::w_lorentz(Everywhere)
+    WRITES: TmunuBase::eTtt(Everywhere)
+    WRITES: TmunuBase::eTtx(Everywhere)
+    WRITES: TmunuBase::eTty(Everywhere)
+    WRITES: TmunuBase::eTtz(Everywhere)
+    WRITES: TmunuBase::eTxx(Everywhere)
+    WRITES: TmunuBase::eTxy(Everywhere)
+    WRITES: TmunuBase::eTxz(Everywhere)
+    WRITES: TmunuBase::eTyy(Everywhere)
+    WRITES: TmunuBase::eTyz(Everywhere)
+    WRITES: TmunuBase::eTzz(Everywhere)
+  } "CT_Dust_addToTmunu"
+}
+
+if (CCTK_EQUALS(calc_expansion, "yes"))
+{
+  schedule CT_Dust_Expansion IN HydroBase_PostStep AFTER HydroBase_Con2Prim
+  {
+    LANG: C
+    READS: ADMBase::kxx(Everywhere)
+    READS: ADMBase::kxy(Everywhere)
+    READS: ADMBase::kxz(Everywhere)
+    READS: ADMBase::kyy(Everywhere)
+    READS: ADMBase::kyz(Everywhere)
+    READS: ADMBase::kzz(Everywhere)
+    READS: ADMBase::dtalp(Everywhere)
+    READS: ADMBase::dtbetax(Everywhere)
+    READS: ADMBase::dtbetay(Everywhere)
+    READS: ADMBase::dtbetaz(Everywhere)
+    READS: ADMBase::alp(Everywhere)
+    READS: ADMBase::gxx(Everywhere)
+    READS: ADMBase::gxy(Everywhere)
+    READS: ADMBase::gxz(Everywhere)
+    READS: ADMBase::gyy(Everywhere)
+    READS: ADMBase::gyz(Everywhere)
+    READS: ADMBase::gzz(Everywhere)
+    READS: ADMBase::betax(Everywhere)
+    READS: ADMBase::betay(Everywhere)
+    READS: ADMBase::betaz(Everywhere)
+    READS: HydroBase::vel(Everywhere)
+    
+    
+    READS: HydroBase::w_lorentz(Everywhere)
+    READS: CT_Dust::DD(Everywhere)
+    READS: CT_Dust::EE(Everywhere)
+    READS: CT_Dust::DDrhs(Everywhere)
+    READS: CT_Dust::EErhs(Everywhere)
+    READS: CT_Dust::SS1rhs(Everywhere)
+    READS: CT_Dust::SS2rhs(Everywhere)
+    READS: CT_Dust::SS3rhs(Everywhere)
+    WRITES: CT_Dust::sigmass11(Interior)
+    WRITES: CT_Dust::sigmass12(Interior)
+    WRITES: CT_Dust::sigmass13(Interior)
+    WRITES: CT_Dust::sigmass22(Interior)
+    WRITES: CT_Dust::sigmass23(Interior)
+    WRITES: CT_Dust::sigmass33(Interior)
+    WRITES: CT_Dust::sigmats1(Interior)
+    WRITES: CT_Dust::sigmats2(Interior)
+    WRITES: CT_Dust::sigmats3(Interior)
+    WRITES: CT_Dust::sigmatt(Interior)
+    WRITES: CT_Dust::Theta(Interior)
+  } "CT_Dust_Expansion"
+}
+
+if (CCTK_EQUALS(calc_expansion, "yes"))
+{
+  schedule CT_Dust_ExpansionBoundary IN HydroBase_PostStep AFTER HydroBase_Con2Prim
+  {
+    LANG: C
+    SYNC: CT_sigmass
+    SYNC: CT_sigmats
+    SYNC: CT_sigmatt
+    SYNC: CT_Theta
+    WRITES: CT_Dust::sigmass11(Boundary)
+    WRITES: CT_Dust::sigmass12(Boundary)
+    WRITES: CT_Dust::sigmass13(Boundary)
+    WRITES: CT_Dust::sigmass22(Boundary)
+    WRITES: CT_Dust::sigmass23(Boundary)
+    WRITES: CT_Dust::sigmass33(Boundary)
+    WRITES: CT_Dust::sigmats1(Boundary)
+    WRITES: CT_Dust::sigmats2(Boundary)
+    WRITES: CT_Dust::sigmats3(Boundary)
+    WRITES: CT_Dust::sigmatt(Boundary)
+    WRITES: CT_Dust::Theta(Boundary)
+  } "CT_Dust_ExpansionBoundary"
+}
+
+schedule CT_Dust_SelectBoundConds in MoL_PostStep
+{
+  LANG: C
+  OPTIONS: level
+  SYNC: CT_D
+  SYNC: CT_E
+  SYNC: CT_S
+} "select boundary conditions"
+
+schedule CT_Dust_CheckBoundaries at BASEGRID
+{
+  LANG: C
+  OPTIONS: meta
+} "check boundaries treatment"
+
+schedule CT_Dust_RegisterVars in MoL_Register
+{
+  LANG: C
+  OPTIONS: meta
+} "Register Variables for MoL"
+schedule group ApplyBCs as CT_Dust_ApplyBCs in MoL_PostStep after CT_Dust_SelectBoundConds
+{
+} "Apply boundary conditions controlled by thorn Boundary"

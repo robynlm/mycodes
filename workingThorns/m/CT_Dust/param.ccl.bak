@@ -1,0 +1,579 @@
+# File produced by Kranc
+
+
+shares: ADMBase
+
+
+EXTENDS CCTK_KEYWORD initial_data "initial_data"
+{
+  "CT_Dust" :: ""
+} 
+
+
+EXTENDS CCTK_KEYWORD initial_lapse "initial_lapse"
+{
+  "CT_Dust" :: ""
+} 
+
+
+EXTENDS CCTK_KEYWORD initial_shift "initial_shift"
+{
+  "CT_Dust" :: ""
+} 
+
+
+
+shares: GenericFD
+
+USES CCTK_INT assume_stress_energy_state
+USES CCTK_INT assume_use_jacobian
+USES CCTK_STRING jacobian_group
+USES CCTK_STRING jacobian_determinant_group
+USES CCTK_STRING jacobian_inverse_group
+USES CCTK_STRING jacobian_derivative_group
+USES CCTK_INT jacobian_identity_map
+
+
+shares: MethodOfLines
+
+USES CCTK_INT MoL_Num_Evolved_Vars
+USES CCTK_INT MoL_Num_ArrayEvolved_Vars
+
+restricted:
+CCTK_INT verbose "verbose" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT other_timelevels "Number of active timelevels for non-evolved grid functions" STEERABLE=RECOVER
+{
+  0:4 :: ""
+} 1
+
+restricted:
+CCTK_REAL eosw "Ratio of pressure to density"
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_REAL Lambda "Cosmological constant"
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_REAL pflrw_t0 "Initial time in FLRW models"
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_REAL pflrw_a0 "Initial value of the scale factor in FLRW models"
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_REAL pflrw_H0 "Initial value of the Hubble rate in FLRW models"
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT nmodes "Number of Fourier modes in each direction"
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT fdOrder "fdOrder"
+{
+  2 :: ""
+  4 :: ""
+  6 :: ""
+  8 :: ""
+} 4
+
+restricted:
+CCTK_INT tile_size "Loop tile size"
+{
+  *:* :: ""
+} -1
+
+restricted:
+CCTK_KEYWORD my_initial_data "my_initial_data"
+{
+  "Minkowski" :: ""
+  "FLRW" :: ""
+} "Minkowski"
+
+restricted:
+CCTK_KEYWORD formalism "Wilson for dust and Valencia for radiation"
+{
+  "Wilson" :: ""
+  "Valencia" :: ""
+} "Wilson"
+
+restricted:
+CCTK_KEYWORD my_rhs_boundary_condition "my_rhs_boundary_condition"
+{
+  "none" :: ""
+  "static" :: ""
+  "radiative" :: ""
+} "none"
+
+private:
+CCTK_KEYWORD my_boundary_condition "my_boundary_condition"
+{
+  "none" :: ""
+  "Minkowski" :: ""
+} "none"
+
+private:
+CCTK_KEYWORD coupling "coupling"
+{
+  "yes" :: ""
+  "no" :: ""
+} "no"
+
+private:
+CCTK_KEYWORD calc_expansion "calc_expansion"
+{
+  "yes" :: ""
+  "no" :: ""
+} "no"
+
+restricted:
+CCTK_INT CT_Dust_MaxNumEvolvedVars "Number of evolved variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Evolved_Vars STEERABLE=RECOVER
+{
+  5:5 :: "Number of evolved variables used by this thorn"
+} 5
+
+restricted:
+CCTK_INT CT_Dust_MaxNumArrayEvolvedVars "Number of Array evolved variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_ArrayEvolved_Vars STEERABLE=RECOVER
+{
+  0:0 :: "Number of Array evolved variables used by this thorn"
+} 0
+
+restricted:
+CCTK_INT timelevels "Number of active timelevels" STEERABLE=RECOVER
+{
+  0:4 :: ""
+} 3
+
+restricted:
+CCTK_INT rhs_timelevels "Number of active RHS timelevels" STEERABLE=RECOVER
+{
+  0:4 :: ""
+} 1
+
+restricted:
+CCTK_INT CT_Dust_Minkowski_calc_every "CT_Dust_Minkowski_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT CT_Dust_FLRW_calc_every "CT_Dust_FLRW_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT CT_Dust_convertFromPrimitives_calc_every "CT_Dust_convertFromPrimitives_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT CT_Dust_convertFromPrimitivesVal_calc_every "CT_Dust_convertFromPrimitivesVal_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT CT_Dust_RHS_calc_every "CT_Dust_RHS_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT CT_Dust_RHSVal_calc_every "CT_Dust_RHSVal_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT CT_Dust_InitRHS_calc_every "CT_Dust_InitRHS_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT CT_Dust_RHSStaticBoundary_calc_every "CT_Dust_RHSStaticBoundary_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT CT_Dust_boundary_calc_every "CT_Dust_boundary_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT CT_Dust_convertToPrimitives_calc_every "CT_Dust_convertToPrimitives_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT CT_Dust_convertToPrimitivesVal_calc_every "CT_Dust_convertToPrimitivesVal_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT CT_Dust_addToTmunu_calc_every "CT_Dust_addToTmunu_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT CT_Dust_Expansion_calc_every "CT_Dust_Expansion_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT CT_Dust_ExpansionBoundary_calc_every "CT_Dust_ExpansionBoundary_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT CT_Dust_Minkowski_calc_offset "CT_Dust_Minkowski_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT CT_Dust_FLRW_calc_offset "CT_Dust_FLRW_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT CT_Dust_convertFromPrimitives_calc_offset "CT_Dust_convertFromPrimitives_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT CT_Dust_convertFromPrimitivesVal_calc_offset "CT_Dust_convertFromPrimitivesVal_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT CT_Dust_RHS_calc_offset "CT_Dust_RHS_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT CT_Dust_RHSVal_calc_offset "CT_Dust_RHSVal_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT CT_Dust_InitRHS_calc_offset "CT_Dust_InitRHS_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT CT_Dust_RHSStaticBoundary_calc_offset "CT_Dust_RHSStaticBoundary_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT CT_Dust_boundary_calc_offset "CT_Dust_boundary_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT CT_Dust_convertToPrimitives_calc_offset "CT_Dust_convertToPrimitives_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT CT_Dust_convertToPrimitivesVal_calc_offset "CT_Dust_convertToPrimitivesVal_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT CT_Dust_addToTmunu_calc_offset "CT_Dust_addToTmunu_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT CT_Dust_Expansion_calc_offset "CT_Dust_Expansion_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT CT_Dust_ExpansionBoundary_calc_offset "CT_Dust_ExpansionBoundary_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+private:
+CCTK_KEYWORD DD_bound "Boundary condition to implement" STEERABLE=ALWAYS
+{
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "skip"
+
+private:
+CCTK_KEYWORD EE_bound "Boundary condition to implement" STEERABLE=ALWAYS
+{
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "skip"
+
+private:
+CCTK_KEYWORD SS1_bound "Boundary condition to implement" STEERABLE=ALWAYS
+{
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "skip"
+
+private:
+CCTK_KEYWORD SS2_bound "Boundary condition to implement" STEERABLE=ALWAYS
+{
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "skip"
+
+private:
+CCTK_KEYWORD SS3_bound "Boundary condition to implement" STEERABLE=ALWAYS
+{
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "skip"
+
+private:
+CCTK_KEYWORD CT_D_bound "Boundary condition to implement" STEERABLE=ALWAYS
+{
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "none"
+
+private:
+CCTK_KEYWORD CT_E_bound "Boundary condition to implement" STEERABLE=ALWAYS
+{
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "none"
+
+private:
+CCTK_KEYWORD CT_S_bound "Boundary condition to implement" STEERABLE=ALWAYS
+{
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "none"
+
+private:
+CCTK_REAL DD_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
+{
+  0:* :: "outgoing characteristic speed > 0"
+} 1.
+
+private:
+CCTK_REAL EE_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
+{
+  0:* :: "outgoing characteristic speed > 0"
+} 1.
+
+private:
+CCTK_REAL SS1_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
+{
+  0:* :: "outgoing characteristic speed > 0"
+} 1.
+
+private:
+CCTK_REAL SS2_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
+{
+  0:* :: "outgoing characteristic speed > 0"
+} 1.
+
+private:
+CCTK_REAL SS3_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
+{
+  0:* :: "outgoing characteristic speed > 0"
+} 1.
+
+private:
+CCTK_REAL CT_D_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
+{
+  0:* :: "outgoing characteristic speed > 0"
+} 1.
+
+private:
+CCTK_REAL CT_E_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
+{
+  0:* :: "outgoing characteristic speed > 0"
+} 1.
+
+private:
+CCTK_REAL CT_S_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
+{
+  0:* :: "outgoing characteristic speed > 0"
+} 1.
+
+private:
+CCTK_REAL DD_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
+{
+  *:* :: "value of limit value is unrestricted"
+} 0.
+
+private:
+CCTK_REAL EE_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
+{
+  *:* :: "value of limit value is unrestricted"
+} 0.
+
+private:
+CCTK_REAL SS1_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
+{
+  *:* :: "value of limit value is unrestricted"
+} 0.
+
+private:
+CCTK_REAL SS2_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
+{
+  *:* :: "value of limit value is unrestricted"
+} 0.
+
+private:
+CCTK_REAL SS3_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
+{
+  *:* :: "value of limit value is unrestricted"
+} 0.
+
+private:
+CCTK_REAL CT_D_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
+{
+  *:* :: "value of limit value is unrestricted"
+} 0.
+
+private:
+CCTK_REAL CT_E_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
+{
+  *:* :: "value of limit value is unrestricted"
+} 0.
+
+private:
+CCTK_REAL CT_S_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
+{
+  *:* :: "value of limit value is unrestricted"
+} 0.
+
+private:
+CCTK_REAL DD_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+{
+  *:* :: "unrestricted"
+} 0.
+
+private:
+CCTK_REAL EE_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+{
+  *:* :: "unrestricted"
+} 0.
+
+private:
+CCTK_REAL SS1_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+{
+  *:* :: "unrestricted"
+} 0.
+
+private:
+CCTK_REAL SS2_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+{
+  *:* :: "unrestricted"
+} 0.
+
+private:
+CCTK_REAL SS3_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+{
+  *:* :: "unrestricted"
+} 0.
+
+private:
+CCTK_REAL CT_D_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+{
+  *:* :: "unrestricted"
+} 0.
+
+private:
+CCTK_REAL CT_E_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+{
+  *:* :: "unrestricted"
+} 0.
+
+private:
+CCTK_REAL CT_S_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+{
+  *:* :: "unrestricted"
+} 0.
+

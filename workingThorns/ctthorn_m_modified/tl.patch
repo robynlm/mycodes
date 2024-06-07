@@ -1,0 +1,6 @@
+#!/bin/bash
+
+sed -i.old 's/timelevels=1/timelevels=3/' CT_Analytic/interface.ccl
+rm CT_Analytic/interface.ccl.old
+sed -i.old 's/\[1\]/[3]/' CT_Analytic/schedule.ccl
+rm CT_Analytic/schedule.ccl.old

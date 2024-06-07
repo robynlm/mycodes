@@ -1,0 +1,40 @@
+
+#################################################
+#              Extended keywords
+#################################################
+SHARES: ADMBase
+EXTENDS CCTK_KEYWORD dtlapse_evolution_method "dtlapse_evolution_method"
+{
+  "CosmoLapse" :: ""
+} 
+
+#################################################
+#          This Thorn's parameters
+#################################################
+
+######## Keywords
+
+private:
+CCTK_KEYWORD CosmoLapse_Kexpression "dt_alpha = - f alpha^n (K - Kexpression)"
+{
+  "zero"  :: ""
+  "initial_K"  :: ""
+  "domain_average_K"  :: ""
+  "average_K"  :: ""
+} "zero"
+
+######## Variables
+
+private:
+CCTK_REAL CosmoLapse_f "dt_alpha = - f alpha^n (K - Kexpression)"
+{
+  *:* :: ""
+} 0
+
+private:
+CCTK_REAL CosmoLapse_n "dt_alpha = - f alpha^n (K - Kexpression)"
+{
+  *:* :: ""
+} 0
+
+

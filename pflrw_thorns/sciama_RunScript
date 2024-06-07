@@ -1,0 +1,51 @@
+#! /bin/bash
+
+echo "Preparing:"
+set -x                          # Output commands
+set -e                          # Abort on errors
+
+cd @RUNDIR@-active
+
+echo "Checking:"
+pwd
+hostname
+date
+#cat ${SLURM_JOB_NODELIST} > SIMFACTORY/NODES
+
+echo "Environment:"
+module purge
+module load system/intel64
+module load intel_comp/2019.2
+module load openmpi/4.0.1
+echo "Environment:"
+export CACTUS_NUM_PROCS=@NUM_PROCS@
+export CACTUS_NUM_THREADS=@NUM_THREADS@
+export OMP_NUM_THREADS=@NUM_THREADS@
+export OMPI_MCA_mtl=^psm
+
+echo "Starting:"
+export CACTUS_STARTTIME=$(date +%s)
+
+env | sort > SIMFACTORY/ENVIRONMENT
+
+echo "Job setup:"
+echo "   Allocated:"
+echo "      Nodes:                      @NODES@"
+echo "      Cores per node:             @PPN@"
+echo "   Running:"
+echo "      MPI processes:              @NUM_PROCS@"
+echo "      OpenMP threads per process: @NUM_THREADS@"
+echo "      MPI processes per node:     @(1.0*@NUM_PROCS@/@NODES@)@"
+echo "      OpenMP threads per core:    @(1.0*(@NUM_PROCS@*@NUM_THREADS@)/(@NODES@*@PPN@))@"
+echo "      OpenMP threads per node:    @PPN_USED@"
+
+if [ @RUNDEBUG@ -eq 0 ]
+then
+#       time srun --mpi=pmi2 -n @NUM_PROCS@ @EXECUTABLE@ -L 3 @PARFILE@
+        time mpirun -n @NUM_PROCS@ @EXECUTABLE@ -L 3 @PARFILE@
+fi
+
+echo "Stopping:"
+date
+
+echo "Done."

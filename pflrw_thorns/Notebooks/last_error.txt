@@ -1,0 +1,107 @@
+Checking status of thorn IDAxiBrillBH
+/home/robynm/codes/ET/code/2022_05/Cactus/configs/sim/build/ICPertFLRW/TensorCalc.f90:940.90:
+
+                                         Gzxx, Gzxy, Gzxz, Gzyy, Gzyz, Gzzz\xE2
+                                                                           1
+Error: Unexpected junk in formal argument list at (1)
+/home/robynm/codes/ET/code/2022_05/Cactus/configs/sim/build/ICPertFLRW/TensorCalc.f90:943.50:
+
+      REAL*8 :: gxxu, gxyu, gxzu, gyyu, gyzu, gzzu
+                                                  1
+Error: Unexpected data declaration statement in CONTAINS section at (1)
+/home/robynm/codes/ET/code/2022_05/Cactus/configs/sim/build/ICPertFLRW/TensorCalc.f90:944.50:
+
+      REAL*8 :: Gxxx, Gxxy, Gxxz, Gxyy, Gxyz, Gxzz
+                                                  1
+Error: Unexpected data declaration statement in CONTAINS section at (1)
+/home/robynm/codes/ET/code/2022_05/Cactus/configs/sim/build/ICPertFLRW/TensorCalc.f90:945.50:
+
+      REAL*8 :: Gyxx, Gyxy, Gyxz, Gyyy, Gyyz, Gyzz
+                                                  1
+Error: Unexpected data declaration statement in CONTAINS section at (1)
+/home/robynm/codes/ET/code/2022_05/Cactus/configs/sim/build/ICPertFLRW/TensorCalc.f90:946.51:
+
+      REAL*8 :: Gzxx, Gzxy, Gzxz, Gzyy, Gzyz, Gzzz 
+                                                   1
+Error: Unexpected data declaration statement in CONTAINS section at (1)
+/home/robynm/codes/ET/code/2022_05/Cactus/configs/sim/build/ICPertFLRW/TensorCalc.f90:949.32:
+
+      REAL*8 :: Gnxn, Gnyn, Gnzn
+                                1
+Error: Unexpected data declaration statement in CONTAINS section at (1)
+/home/robynm/codes/ET/code/2022_05/Cactus/configs/sim/build/ICPertFLRW/TensorCalc.f90:953.46:
+
+             gxzu*Gzxx + gyzu*Gzxy + gzzu*Gzxz
+                                              1
+Error: Unexpected assignment statement in CONTAINS section at (1)
+/home/robynm/codes/ET/code/2022_05/Cactus/configs/sim/build/ICPertFLRW/TensorCalc.f90:957.46:
+
+             gxzu*Gzxy + gyzu*Gzyy + gzzu*Gzyz
+                                              1
+Error: Unexpected assignment statement in CONTAINS section at (1)
+/home/robynm/codes/ET/code/2022_05/Cactus/configs/sim/build/ICPertFLRW/TensorCalc.f90:961.46:
+
+             gxzu*Gzxz + gyzu*Gzyz + gzzu*Gzzz
+                                              1
+Error: Unexpected assignment statement in CONTAINS section at (1)
+/home/robynm/codes/ET/code/2022_05/Cactus/configs/sim/build/ICPertFLRW/TensorCalc.f90:963.7:
+
+    end subroutine ICPertFLRW_Christoffel_contraction_one
+       1
+Error: Expecting END MODULE statement at (1)
+/home/robynm/codes/ET/code/2022_05/Cactus/configs/sim/build/ICPertFLRW/TensorCalc.f90:969.90:
+
+                                         Gzxx, Gzxy, Gzxz, Gzyy, Gzyz, Gzzz\xE2
+                                                                           1
+Error: Unexpected junk in formal argument list at (1)
+/home/robynm/codes/ET/code/2022_05/Cactus/configs/sim/build/ICPertFLRW/TensorCalc.f90:972.50:
+
+      REAL*8 :: gxxu, gxyu, gxzu, gyyu, gyzu, gzzu
+                                                  1
+Error: Unexpected data declaration statement in CONTAINS section at (1)
+/home/robynm/codes/ET/code/2022_05/Cactus/configs/sim/build/ICPertFLRW/TensorCalc.f90:973.50:
+
+      REAL*8 :: Gxxx, Gxxy, Gxxz, Gxyy, Gxyz, Gxzz
+                                                  1
+Error: Unexpected data declaration statement in CONTAINS section at (1)
+/home/robynm/codes/ET/code/2022_05/Cactus/configs/sim/build/ICPertFLRW/TensorCalc.f90:974.50:
+
+      REAL*8 :: Gyxx, Gyxy, Gyxz, Gyyy, Gyyz, Gyzz
+                                                  1
+Error: Unexpected data declaration statement in CONTAINS section at (1)
+/home/robynm/codes/ET/code/2022_05/Cactus/configs/sim/build/ICPertFLRW/TensorCalc.f90:975.51:
+
+      REAL*8 :: Gzxx, Gzxy, Gzxz, Gzyy, Gzyz, Gzzz 
+                                                   1
+Error: Unexpected data declaration statement in CONTAINS section at (1)
+/home/robynm/codes/ET/code/2022_05/Cactus/configs/sim/build/ICPertFLRW/TensorCalc.f90:978.32:
+
+      REAL*8 :: Gxnn, Gynn, Gznn
+                                1
+Error: Unexpected data declaration statement in CONTAINS section at (1)
+/home/robynm/codes/ET/code/2022_05/Cactus/configs/sim/build/ICPertFLRW/TensorCalc.f90:981.76:
+
+                                  Gxxx, Gxxy, Gxxz, Gxyy, Gxyz, Gxzz, Gxnn)
+                                                                           1
+Error: Unexpected CALL statement in CONTAINS section at (1)
+/home/robynm/codes/ET/code/2022_05/Cactus/configs/sim/build/ICPertFLRW/TensorCalc.f90:983.76:
+
+                                  Gyxx, Gyxy, Gyxz, Gyyy, Gyyz, Gyzz, Gynn)
+                                                                           1
+Error: Unexpected CALL statement in CONTAINS section at (1)
+/home/robynm/codes/ET/code/2022_05/Cactus/configs/sim/build/ICPertFLRW/TensorCalc.f90:985.69:
+
+                                   Gzxx, Gzxy, Gzxz, Gzyy, Gzyz, Gzzz\xE2\x80\x8B
+                                                                     1
+Error: Syntax error in argument list at (1)
+/home/robynm/codes/ET/code/2022_05/Cactus/configs/sim/build/ICPertFLRW/TensorCalc.f90:987.7:
+
+    end subroutine ICPertFLRW_Christoffel_contraction_two
+       1
+Error: Expecting END MODULE statement at (1)
+make[3]: *** [TensorCalc.F90.o] Error 1
+make[2]: *** [make.checked] Error 2
+make[1]: *** [/home/robynm/codes/ET/code/2022_05/Cactus/configs/sim/lib/libthorn_ICPertFLRW.a] Error 2
+make[1]: *** Waiting for unfinished jobs....
+make: *** [sim] Error 2
+[robynm@icg-laptop Cactus]$ 

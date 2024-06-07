@@ -1,0 +1,115 @@
+# File produced by Kranc
+
+implements: CT_Dust
+
+inherits:   ADMBase Boundary GenericFD Grid HydroBase TmunuBase
+
+
+
+USES INCLUDE: loopcontrol.h
+USES INCLUDE: Symmetry.h
+USES INCLUDE: Boundary.h
+
+CCTK_INT FUNCTION MoLRegisterEvolved(CCTK_INT IN EvolvedIndex, CCTK_INT IN RHSIndex)
+USES FUNCTION MoLRegisterEvolved
+
+SUBROUTINE Diff_coeff(CCTK_POINTER_TO_CONST IN cctkGH, CCTK_INT IN dir, CCTK_INT IN nsize, CCTK_INT OUT ARRAY imin, CCTK_INT OUT ARRAY imax, CCTK_REAL OUT ARRAY q, CCTK_INT IN table_handle)
+USES FUNCTION Diff_coeff
+
+CCTK_INT FUNCTION MultiPatch_GetMap(CCTK_POINTER_TO_CONST IN cctkGH)
+USES FUNCTION MultiPatch_GetMap
+
+CCTK_INT FUNCTION MultiPatch_GetBbox(CCTK_POINTER_TO_CONST IN cctkGH, CCTK_INT IN size, CCTK_INT OUT ARRAY bbox)
+USES FUNCTION MultiPatch_GetBbox
+
+CCTK_INT FUNCTION GetBoundarySpecification(CCTK_INT IN size, CCTK_INT OUT ARRAY nboundaryzones, CCTK_INT OUT ARRAY is_internal, CCTK_INT OUT ARRAY is_staggered, CCTK_INT OUT ARRAY shiftout)
+USES FUNCTION GetBoundarySpecification
+
+CCTK_INT FUNCTION MultiPatch_GetBoundarySpecification(CCTK_INT IN map, CCTK_INT IN size, CCTK_INT OUT ARRAY nboundaryzones, CCTK_INT OUT ARRAY is_internal, CCTK_INT OUT ARRAY is_staggered, CCTK_INT OUT ARRAY shiftout)
+USES FUNCTION MultiPatch_GetBoundarySpecification
+
+CCTK_INT FUNCTION SymmetryTableHandleForGrid(CCTK_POINTER_TO_CONST IN cctkGH)
+USES FUNCTION SymmetryTableHandleForGrid
+
+CCTK_INT FUNCTION Boundary_SelectGroupForBC(CCTK_POINTER_TO_CONST IN GH, CCTK_INT IN faces, CCTK_INT IN boundary_width, CCTK_INT IN table_handle, CCTK_STRING IN group_name, CCTK_STRING IN bc_name)
+USES FUNCTION Boundary_SelectGroupForBC
+
+CCTK_INT FUNCTION Driver_SelectGroupForBC(CCTK_POINTER_TO_CONST IN GH, CCTK_INT IN faces, CCTK_INT IN boundary_width, CCTK_INT IN table_handle, CCTK_STRING IN group_name, CCTK_STRING IN bc_name)
+USES FUNCTION Driver_SelectGroupForBC
+
+CCTK_INT FUNCTION Boundary_SelectVarForBC(CCTK_POINTER_TO_CONST IN GH, CCTK_INT IN faces, CCTK_INT IN boundary_width, CCTK_INT IN table_handle, CCTK_STRING IN var_name, CCTK_STRING IN bc_name)
+USES FUNCTION Boundary_SelectVarForBC
+
+CCTK_INT FUNCTION Driver_SelectVarForBC(CCTK_POINTER_TO_CONST IN GH, CCTK_INT IN faces, CCTK_INT IN boundary_width, CCTK_INT IN table_handle, CCTK_STRING IN var_name, CCTK_STRING IN bc_name)
+USES FUNCTION Driver_SelectVarForBC
+
+public:
+CCTK_REAL CT_D type=GF timelevels=4 tags='tensortypealias="Scalar" tensorweight=0'
+{
+  DD
+} "CT_D"
+
+public:
+CCTK_REAL CT_E type=GF timelevels=4 tags='tensortypealias="Scalar" tensorweight=0'
+{
+  EE
+} "CT_E"
+
+public:
+CCTK_REAL CT_S type=GF timelevels=4 tags='tensortypealias="D" tensorweight=0'
+{
+  SS1,
+  SS2,
+  SS3
+} "CT_S"
+
+public:
+CCTK_REAL CT_Theta type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=0'
+{
+  Theta
+} "CT_Theta"
+
+public:
+CCTK_REAL CT_sigmatt type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=0'
+{
+  sigmatt
+} "CT_sigmatt"
+
+public:
+CCTK_REAL CT_sigmats type=GF timelevels=1 tags='tensortypealias="D" tensorweight=0'
+{
+  sigmats1,
+  sigmats2,
+  sigmats3
+} "CT_sigmats"
+
+public:
+CCTK_REAL CT_sigmass type=GF timelevels=1 tags='tensortypealias="DD_sym" tensorweight=0'
+{
+  sigmass11,
+  sigmass12,
+  sigmass13,
+  sigmass22,
+  sigmass23,
+  sigmass33
+} "CT_sigmass"
+
+public:
+CCTK_REAL CT_Drhs type=GF timelevels=4 tags='tensortypealias="Scalar" tensorweight=0 Prolongation="None"'
+{
+  DDrhs
+} "CT_Drhs"
+
+public:
+CCTK_REAL CT_Erhs type=GF timelevels=4 tags='tensortypealias="Scalar" tensorweight=0 Prolongation="None"'
+{
+  EErhs
+} "CT_Erhs"
+
+public:
+CCTK_REAL CT_Srhs type=GF timelevels=4 tags='tensortypealias="D" tensorweight=0 Prolongation="None"'
+{
+  SS1rhs,
+  SS2rhs,
+  SS3rhs
+} "CT_Srhs"
