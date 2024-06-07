@@ -1,1 +1,0 @@
-SRCS = DefineRc.F90 ICCalc.F90 TensorCalc.F90

@@ -1,3 +1,0 @@
-cat: /home/robynm/simulations/pflrw_d3e2_L1206_t1_N32_EdS_GRH_spin_CPunc_MR/output-0000/pflrw_d3e2_L1206_t1_N32_EdS_GRH_spin_CPunc_MR.par: No such file or directory
-cat: /Users/robynmunoz/simulations/pflrw_d3e2_L1206_t1_N32_EdS_GRH_spin_CPunc_MR/output-0000/pflrw_d3e2_L1206_t1_N32_EdS_GRH_spin_CPunc_MR.par: No such file or directory
-slurmstepd: error: *** JOB 4023218 ON node205 CANCELLED AT 2024-06-07T15:50:20 DUE TO TIME LIMIT ***
