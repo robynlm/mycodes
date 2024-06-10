@@ -26,6 +26,7 @@ class MyClass:
         logical = [k in key for k in fnew_keys]
         if np.sum(logical)==0:
             self.f.copy(key,fnew)
+            # TODO copy time attribute
             
     def join_chunks(self):
         for rl in range(param['max_refinement_levels']):
@@ -44,10 +45,10 @@ class MyClass:
                         
                 # merge the sections
                 if nbrmpi>0:
-                    print(new_key, nbrmpi, ' ', end="", flush=True)
                     nbrmpi += 1
                     
-                    cut_keys = [new_key+' c='+str(c) for c in range(nbrmpi)]
+                    cut_keys = [new_key+' c='+str(c) 
+                                for c in range(nbrmpi)]
                     if ghosts_on:
                         cut_data = [np.array(self.f[k])[self.iG:-self.iG,
                                                         self.iG:-self.iG,
@@ -71,57 +72,74 @@ class MyClass:
                         if nbrmpi == 4:
                             ndata = cut_data
                         elif nbrmpi == 5:
-                            ndata = [np.append(cut_data[0], cut_data[1], axis=2),
+                            ndata = [np.append(
+                                cut_data[0], cut_data[1], axis=2),
                                      cut_data[2], cut_data[3], cut_data[4]]
                         elif nbrmpi == 6:
-                            ndata = [np.append(cut_data[0], cut_data[1], axis=2), 
+                            ndata = [np.append(
+                                cut_data[0], cut_data[1], axis=2), 
                                      cut_data[2],
-                                     np.append(cut_data[3], cut_data[4], axis=2), 
+                                     np.append(
+                                         cut_data[3], cut_data[4], axis=2), 
                                      cut_data[5]]
                         elif nbrmpi == 7:
-                            ndata = [np.append(cut_data[i], cut_data[i+1], axis=2) 
+                            ndata = [np.append(
+                                cut_data[i], cut_data[i+1], axis=2) 
                                      for i in np.arange(3)*2]
                             ndata += [cut_data[6]]
                         else:
-                            ndata = [np.append(cut_data[i], cut_data[i+1], axis=2) 
+                            ndata = [np.append(
+                                cut_data[i], cut_data[i+1], axis=2) 
                                      for i in np.arange(4)*2]
                         # fix axis = 1 and 0
-                        uncut_data = np.append(np.append(ndata[0], ndata[1], 
-                                                         axis=1), 
-                                               np.append(ndata[2], ndata[3], 
-                                                         axis=1), 
-                                               axis=0)
+                        uncut_data = np.append(
+                            np.append(ndata[0], ndata[1], axis=1), 
+                            np.append(ndata[2], ndata[3], axis=1), 
+                            axis=0)
 
                     # =================
                     elif nbrmpi >= 9 and nbrmpi < 13:
                         # fix axis = 2
                         if nbrmpi == 9:
-                            ndata = [np.append(cut_data[0], cut_data[1], axis=2), 
-                                     cut_data[2], 
-                                     np.append(cut_data[3], cut_data[4], axis=2), 
-                                     cut_data[5], 
-                                     np.append(cut_data[6], cut_data[7], axis=2), 
-                                     cut_data[8]]
+                            ndata = [
+                                np.append(
+                                    cut_data[0], cut_data[1], axis=2), 
+                                cut_data[2], 
+                                np.append(
+                                    cut_data[3], cut_data[4], axis=2), 
+                                cut_data[5], 
+                                np.append(
+                                    cut_data[6], cut_data[7], axis=2), 
+                                cut_data[8]]
                         elif nbrmpi == 10:
-                            ndata = [np.append(cut_data[0], cut_data[1], axis=2), 
-                                     np.append(cut_data[2], cut_data[3], axis=2), 
-                                     np.append(cut_data[4], cut_data[5], axis=2), 
-                                     cut_data[6],
-                                     np.append(cut_data[7], cut_data[8], axis=2), 
-                                     cut_data[9]]
+                            ndata = [
+                                np.append(
+                                    cut_data[0], cut_data[1], axis=2), 
+                                np.append(
+                                    cut_data[2], cut_data[3], axis=2), 
+                                np.append(
+                                    cut_data[4], cut_data[5], axis=2), 
+                                cut_data[6],
+                                np.append(
+                                    cut_data[7], cut_data[8], axis=2), 
+                                cut_data[9]]
                         elif nbrmpi == 11:
-                            ndata = [np.append(cut_data[i], cut_data[i+1], axis=2) 
-                                     for i in np.arange(5)*2]
+                            ndata = [
+                                np.append(
+                                    cut_data[i], cut_data[i+1], axis=2) 
+                                for i in np.arange(5)*2]
                             ndata += [cut_data[10]]
                         else:
-                            ndata = [np.append(cut_data[i], cut_data[i+1], axis=2) 
-                                     for i in np.arange(6)*2]
+                            ndata = [
+                                np.append(
+                                    cut_data[i], cut_data[i+1], axis=2) 
+                                for i in np.arange(6)*2]
                         # fix axis = 1 and 0
                         nndata = [np.append(ndata[i], ndata[i+1], axis=1) 
                                   for i in np.arange(3)*2]
-                        uncut_data = np.append(np.append(nndata[0], nndata[1], 
-                                                         axis=0), 
-                                               nndata[2], axis=0)
+                        uncut_data = np.append(
+                            np.append(nndata[0], nndata[1], axis=0), 
+                            nndata[2], axis=0)
 
                     # =================
                     else:
@@ -130,12 +148,13 @@ class MyClass:
 
                     try:
                         self.f.create_dataset(new_key, data=uncut_data)
+                        for atk in ['delta', 'time', 'level', 'timestep']:
+                            self.f[new_key].attrs[atk] = self.f[cut_keys[0]].attrs[atk]
                     except:
                         print("already exists", flush=True)
 
                     for k in cut_keys:
                         del self.f[k]
-            print()
         
         
 
@@ -148,15 +167,10 @@ if __name__ == "__main__":
     param = RRead.read_parameters(simname)
     RRead.MakeDir(param['h5datapath'][:-1])
     
-    # How many restarts are present?
-    files = RRead.BASH('ls '+param['HorSpath']+param['simname']).split('\n')
-    nbr_restarts = len([fl for fl in files 
-                        if 'output' in fl and 'active' not in fl])  
-    
     print("\n========================== Split the files per iteration", 
           flush=True)  
     
-    for irestart in range(nbr_restarts):
+    for irestart in range(param['nbr_restarts']):
         if irestart>=1:
             print("\n=============", flush=True)  
             print('Going through restart nbr '+str(irestart), flush=True)
@@ -180,11 +194,13 @@ if __name__ == "__main__":
         if want_to_copy_things:
             for file in files_kept:
                 if 'ERROR' in file:
-                    print('.h5 file not present in :' + datapath, flush=True)
+                    print('.h5 file not present in :' 
+                          + datapath, flush=True)
                 else:
                     # Open the file
                     f = h5py.File(file,'r')
-                    print('\nusing file: {}'.format(f.filename), flush=True)
+                    print('\nusing file: {}'.format(f.filename), 
+                          flush=True)
 
                     # Collect the keys
                     filekeys = [key for key in f.keys() if 'it=' in key]
@@ -205,14 +221,16 @@ if __name__ == "__main__":
                                           for k in filekeys])
                         last_file_name = (param['h5datapath'] 
                                           + param['simname'] 
-                                          + '_it_{:06d}.hdf5'.format(last_it))
+                                          + '_it_' 
+                                          + '{:06d}.hdf5'.format(last_it))
                         # is the last key in the last file?
                         if last_file_name in files_already_done:
                             last_file = h5py.File(last_file_name, 'r')
                             last_file_keys = [k for k in last_file.keys()]
                             last_keys = [k for k in filekeys 
                                         if 'it='+str(last_it) in k]
-                            logical = [k in last_file_keys for k in last_keys]
+                            logical = [k in last_file_keys 
+                                       for k in last_keys]
                             # have these keys already been done?
                             if np.sum(logical)==len(logical):
                                 copy_file = False
@@ -220,7 +238,8 @@ if __name__ == "__main__":
                             else:
                                 copy_file = True
                             last_file.close()
-                            del last_keys, last_file, last_file_keys, logical
+                            del last_keys, last_file
+                            del last_file_keys, logical
                         else:
                             copy_file = True
                         del last_it, last_file_name
@@ -233,10 +252,18 @@ if __name__ == "__main__":
                         for keycounter, key in enumerate(filekeys):
                             C.cp_it(key)
                             if keycounter % int(nbr_filekeys/10) == 0:
-                                percent_done = (keycounter * 100 / nbr_filekeys)
-                                print('Progress = {:.2f}%'.format(percent_done), 
-                                      flush=True)
+                                percent_done = (keycounter * 100 
+                                                / nbr_filekeys)
+                                if keycounter==0:
+                                    print('Progress = '
+                                          + '{:.2f}%'.format(percent_done), 
+                                          end="", flush=True)
+                                else:
+                                    print(', {:.2f}%'.format(percent_done), 
+                                          end="", flush=True)
+                                    
                         del C
+                    print(flush=True)
                     f.close()
                     #RRead.BASH('rm '+file)
         

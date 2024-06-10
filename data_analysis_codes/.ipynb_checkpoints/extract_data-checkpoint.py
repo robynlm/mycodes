@@ -54,6 +54,7 @@ class MyClass:
         locfinder = ODUDLoc.ODUDLocClass(param)        
         self.Locations, loclab = locfinder.findlocations()
         self.locsuffix = ['_av', '_L1', '_var', '_max', '_min'] + loclab
+        self.print_header_val = True
         self.header = []
 
     # Averaging scheme
@@ -86,7 +87,8 @@ class MyClass:
         dvar = RRead.safe_division(var, var_th)-1 
         return dvar
     
-    # Provide the average, variance, and the values at the under and over density
+    # Provide the average, variance, 
+    # and the values at the under and over density
     def recval(self, V, gdet, F):
         if isinstance(F, (int, float, np.ndarray, np.generic)):
             F = [F]
@@ -102,12 +104,14 @@ class MyClass:
 
     def update_header(self, varnames, withrec=False):
         if withrec:
-            print(varnames, flush=True)
             for ivar in varnames:
                 self.header += [ivar+measure for measure in self.locsuffix]
+            if self.print_header_val:
+                print(varnames, end=" ", flush=True)
         else:
-            print(varnames, ' global value', flush=True)
             self.header += varnames
+            if self.print_header_val:
+                print(varnames, ' global value', end=" ", flush=True)
             
     def collect_var(self, key, f, NEWROW, Volume, gdet):
         if '::' in key:
@@ -140,16 +144,20 @@ class MyClass:
     def getvals(self, it):       
         # Open iteration file
         it = int(it)
+        f = h5py.File('{}_it_{:06d}.hdf5'.format(self.it_file_name, it), 'r')
+        
+        # working keys
+        working_keys = [k for k in list(f.keys()) if ' rl=0' in k]
+        
         NEWROW = [it]
         if self.verbose: print('it = ', it, flush=True)
         if it==0: self.update_header(['it'])
-        f = h5py.File('{}_it_{:06d}.hdf5'.format(self.it_file_name, it), 'r') 
-        
-        t = f[list(f.keys())[0]].attrs['time']
+
+        t = f[working_keys[0]].attrs['time']
         NEWROW += [t]
         if self.verbose: print('t = ', t, flush=True)
         if it==0: self.update_header(['t'])
-        
+
         #---------------------------------------------------
         # Spatial Metric
         #---------------------------------------------------
@@ -158,8 +166,7 @@ class MyClass:
         gij_keys = [self.get_key('ADMBASE', gij, it) 
                     for gij in ['gxx', 'gxy', 'gxz', 'gyy', 'gyz', 'gzz']]
         metric, gdown_full = RRead.read_xyz(f, gij_keys)
-        gdown = RRead.cut2(gdown_full,
-                           self.param['ghost_size'], self.param['Nx'])
+        gdown = RRead.cut2(gdown_full, self.param['ghost_size'], self.param['Nx'])
         gup = RRead.inv3(gdown)
         del gij_keys, gdown_full, metric
 
@@ -170,47 +177,51 @@ class MyClass:
         NEWROW += self.recval(Volume, gdet, [gdet, aloc])
         if it==0: self.update_header(['gdet', 'aloc'], withrec=True)
         del aloc
-        
-        NEWROW += self.recval(Volume, gdet, [gup[0, 0], gup[0, 1], gup[0, 2], 
-                                             gup[1, 1], gup[1, 2], gup[2, 2]])
+
+        NEWROW += self.recval(Volume, gdet, 
+                              [gup[0, 0], gup[0, 1], gup[0, 2], 
+                               gup[1, 1], gup[1, 2], gup[2, 2]])
         if it==0: self.update_header(['guxx', 'guxy', 'guxz', 
-                                      'guyy', 'guyz', 'guzz'], withrec=True)
-        
+                                      'guyy', 'guyz', 'guzz'], 
+                                     withrec=True)
+
         #---------------------------------------------------
         # All variables
         #---------------------------------------------------
-        for key in list(f.keys()):
+        for key in working_keys:
             self.collect_var(key, f, NEWROW, Volume, gdet)
-        
+
         #---------------------------------------------------
         #  Curvature
         #---------------------------------------------------
-        Christoffeludd, Christoffelddd = self.RCW.Christoffel_symbol(gdown, gup)
+        Christoffeludd, Christoffelddd = self.RCW.Christoffel_symbol(
+            gdown, gup)
         RicciTdown, RicciS = self.RCW.Ricci_TandS(gup, Christoffeludd)
-        NEWROW += self.recval(Volume, gdet, [RicciS])+[self.L1_error(RicciS)]
+        NEWROW += self.recval(Volume, gdet, [RicciS])
+        NEWROW += [self.L1_error(RicciS)]
         if it==0: self.update_header(['RicciS'], withrec=True)
         if it==0: self.update_header(['RicciS_L1error'])
-        
+
         #---------------------------------------------------
         #  Lapse
         #---------------------------------------------------
-        if self.get_key('ADMBASE', 'alp', it) in f.keys():
+        if self.get_key('ADMBASE', 'alp', it) in working_keys:
             if self.verbose: print('get lapse', flush=True)
             alpha = self.get_1ddata(f, ['ADMBASE', 'alp', it])
         else:
             alpha = np.ones(np.shape(gdown[0,0]))
         alpha2 = alpha**2
-        
-        if self.get_key('ADMBASE', 'dtalp', it) in f.keys():
+
+        if self.get_key('ADMBASE', 'dtalp', it) in working_keys:
             dtalpha = self.get_1ddata(f, ['ADMBASE', 'dtalp', it])
         else:
             dtalpha = np.zeros(np.shape(gdown[0,0]))
         alpha2 = alpha**2
-        
+
         #---------------------------------------------------
         #  Shift
         #---------------------------------------------------
-        if self.get_key('ADMBASE', 'betax', it) in f.keys():
+        if self.get_key('ADMBASE', 'betax', it) in working_keys:
             if self.verbose: print('get shift', flush=True)
             betax = self.get_1ddata(f, ['ADMBASE', 'betax', it])
             betay = self.get_1ddata(f, ['ADMBASE', 'betay', it])
@@ -225,17 +236,20 @@ class MyClass:
             betaup = np.zeros(np.shape(gdown[0]))
             betadown = np.zeros(np.shape(gdown[0]))
             betasquare = np.zeros(np.shape(gdown[0,0]))
-        
+
         #---------------------------------------------------
         #  Spacetime metric
         #---------------------------------------------------
-        Box1 = np.ones((self.param['Nx'], self.param['Ny'], self.param['Nz']))
-        Box0 = np.zeros((self.param['Nx'], self.param['Ny'], self.param['Nz']))
-        g4down4 = np.array([[-alpha2 + betasquare, 
-                            betadown[0], betadown[1], betadown[2]],
-                           [betadown[0], gdown[0,0], gdown[0,1], gdown[0,2]],
-                           [betadown[1], gdown[1,0], gdown[1,1], gdown[1,2]],
-                           [betadown[2], gdown[2,0], gdown[2,1], gdown[2,2]]])
+        Box1 = np.ones(
+            (self.param['Nx'], self.param['Ny'], self.param['Nz']))
+        Box0 = np.zeros(
+            (self.param['Nx'], self.param['Ny'], self.param['Nz']))
+        g4down4 = np.array(
+            [[-alpha2 + betasquare, 
+              betadown[0], betadown[1], betadown[2]],
+            [betadown[0], gdown[0,0], gdown[0,1], gdown[0,2]],
+            [betadown[1], gdown[1,0], gdown[1,1], gdown[1,2]],
+            [betadown[2], gdown[2,0], gdown[2,1], gdown[2,2]]])
         g4up4 = RRead.inv4(g4down4)
 
         #---------------------------------------------------
@@ -243,11 +257,13 @@ class MyClass:
         #---------------------------------------------------
         if self.verbose: print('get rho_u', flush=True)
         # rho along fluidgauge
-        if self.get_key('CT_DUST', 'rho', it) in f.keys():
+        if self.get_key('CT_DUST', 'rho', it) in working_keys:
             rho_u = self.get_1ddata(f, ['CT_DUST', 'rho', it])
         else:
-            rho0 = self.get_1ddata(f, ['HYDROBASE', 'rho', it]) # rest mass energy density
-            eps = self.get_1ddata(f, ['HYDROBASE', 'eps', it]) # specific internal energy
+            # rest mass energy density
+            rho0 = self.get_1ddata(f, ['HYDROBASE', 'rho', it]) 
+            # specific internal energy
+            eps = self.get_1ddata(f, ['HYDROBASE', 'eps', it]) 
             rho_u = rho0 * (1 + eps)
 
         #---------------------------------------------------
@@ -255,7 +271,7 @@ class MyClass:
         #---------------------------------------------------
         if not param['synchronous']:
             if self.verbose: print('get fluid velocity', flush=True)
-            if self.get_key('CT_DUST', 'u1', it) in f.keys():
+            if self.get_key('CT_DUST', 'u1', it) in working_keys:
                 u1down = self.get_1ddata(f, ['CT_DUST', 'u1', it])
                 u2down = self.get_1ddata(f, ['CT_DUST', 'u2', it])
                 u3down = self.get_1ddata(f, ['CT_DUST', 'u3', it])
@@ -281,7 +297,8 @@ class MyClass:
                 u0down = udown4[0]
                 del u0down, u1up, u2up, u3up, uup4
 
-            hdown4 = g4down4 + np.einsum('a...,b...->ab...', udown4, udown4)
+            hdown4 = g4down4 + np.einsum('a...,b...->ab...', 
+                                         udown4, udown4)
             hdet4 = RRead.det4(hdown4)
             hdet3 = RRead.det3(hdown4[1:,1:])
             VolumeF = np.sum(np.sqrt(hdet3))*self.cell_vol
@@ -306,14 +323,14 @@ class MyClass:
         #---------------------------------------------------
         #  T00
         #---------------------------------------------------
-        if self.get_key('TMUNUBASE', 'eTtt', it) in f.keys():
+        if self.get_key('TMUNUBASE', 'eTtt', it) in working_keys:
             if self.verbose: print('get T_00', flush=True)
             T00 = self.get_1ddata(f, ['TMUNUBASE', 'eTtt', it])
             rho_n = T00 / alpha2
             NEWROW += self.recval(Volume, gdet, [rho_n])
             if it==0: self.update_header(['rho_n'], withrec=True)
             del rho_n, T00, rho_u
-        
+
         #---------------------------------------------------
         # Extrinsic Curvature
         #---------------------------------------------------
@@ -325,107 +342,30 @@ class MyClass:
         Kdown = RRead.cut2(Kdown_full, self.param['ghost_size'], 
                            self.param['Nx'])
         del kij_keys, curv, Kdown_full
-        
+
         # Kup
         Kup = np.einsum('ia...,jb...,ab... -> ij...', gup, gup, Kdown)
-        NEWROW += self.recval(Volume, gdet, [Kup[0, 0], Kup[0, 1], Kup[0, 2], 
-                                             Kup[1, 1], Kup[1, 2], Kup[2, 2]])
+        NEWROW += self.recval(Volume, gdet, 
+                              [Kup[0, 0], Kup[0, 1], Kup[0, 2], 
+                               Kup[1, 1], Kup[1, 2], Kup[2, 2]])
         if it==0: self.update_header(['Kuxx', 'Kuxy', 'Kuxz', 
-                                      'Kuyy', 'Kuyz', 'Kuzz'], withrec=True)
+                                      'Kuyy', 'Kuyz', 'Kuzz'], 
+                                     withrec=True)
         del Kup
 
         # Trace 
         K = np.einsum('ij...,ij... -> ...', gup, Kdown)
         NEWROW += self.recval(Volume, gdet, [K])
         if it==0: self.update_header(['K'], withrec=True)
-        
+
         # Traceless part of extrinsic curvature
         Adown = Kdown - (K/3)*gdown
         Aup = np.einsum('ib...,ja...,ab... -> ij...', gup, gup, Adown)
         A2 = np.einsum('ij...,ij... -> ...', Adown, Aup)/2
         NEWROW += self.recval(Volume, gdet, A2)
         if it==0: self.update_header(['A2'], withrec=True)
-        del Adown, Aup
+        del Adown, Aup, K, A2, gdet, Volume
         
-        # TO DO: record space dependant shear as well
-        # sigma_{ij} e^i e^j
-                
-        # Backreaction
-        NEWROW += [(2/3) * ( self.average(Volume, gdet, K**2) 
-                            - self.average(Volume, gdet, K)**2 ) 
-                   - 2*self.average(Volume, gdet, A2)]
-        if it==0: self.update_header(['QK'])
-        del K, A2
-        
-        #---------------------------------------------------
-        # Fluid expansion
-        #---------------------------------------------------
-        # UPDATE FOR BETA
-        Gudd4 = self.RCW.Christoffel_symbol4(alpha, dtalpha, Kdown, 
-                                             gup, Christoffeludd)
-        dtudown4 = np.zeros(np.shape(udown4))
-        CovDu = self.RCW.CovD4_tensor1down(Gudd4, udown4, dtudown4)
-        hmixed4 = np.einsum('ac...,cb...->ab...', g4up4, hdown4)
-        Thetadown = self.RCW.symmetric_tensor(np.einsum('ab...,ac...->bc...', 
-                                                        hmixed4, CovDu))
-        del Gudd4, CovDu, hmixed4
-        Theta = np.einsum('ab...,ab...->...', g4up4, Thetadown)
-        sheardown = Thetadown - (1/3)*Theta*hdown4
-        shearup = np.einsum('ib...,ja...,ab... -> ij...', 
-                            g4up4, g4up4, sheardown)
-        shear2 = np.einsum('ij...,ij... -> ...', sheardown, shearup)/2
-        # TO DO: calc with tetrad
-        
-        NEWROW += self.recval(Volume, gdet, [Theta, shear2])
-        if it==0: self.update_header(['Theta', 'shear2'], withrec=True)
-        NEWROW += [(2/3) * ( self.average(VolumeF, hdet3, Theta**2) 
-                            - self.average(VolumeF, hdet3, Theta)**2 ) 
-                   - 2*self.average(VolumeF, hdet3, shear2)]
-        if it==0: self.update_header(['QTheta'])
-        del Thetadown, Theta, sheardown, shearup, shear2, hdown4
-        
-        #---------------------------------------------------
-        # Gravitomagneism
-        #---------------------------------------------------
-        # TO DO: add lapse in curl calculation
-        # TO DO: calc in terms of fluid flow
-        # UPDATE FOR BETA
-        LCdddd4 = self.RCW.LeviCivita4(g4down4)
-        nup4 = np.array([1/alpha, Box0, Box0, Box0])
-        LCddd3 = np.einsum('d..., dabc... -> abc...', nup4, LCdddd4)[1:,1:,1:]
-        del Box0, g4down4, alpha2, alpha
-        LCuud3 = np.einsum('ae..., bf..., efc... -> abc...', 
-                           gup, gup, LCddd3)
-        del LCddd3
-                
-        Edict = self.RCW.Weyl_E(gdown, gup, LCuud3, Christoffeludd, 
-                                RicciS, RicciTdown, Kdown)
-        del RicciS, RicciTdown
-        NEWROW += self.recval(Volume, gdet, [Edict['E2'], 
-                                             Edict['divE_norm'],  
-                                             Edict['curlE_norm']])
-        if it==0: self.update_header(['E2', 'divE_norm', 'curlE_norm'], 
-                                     withrec=True)
-        Bdict = self.RCW.Weyl_B(gdown, gup, LCuud3, Christoffeludd, Kdown)
-        del gdown, gup, LCuud3, Christoffeludd, Kdown
-                
-        B2onE2 = RRead.safe_division(Bdict['B2'], Edict['E2'])
-        B2onE2[np.where(Bdict['B2']<1e-20)] = 0.0
-        dBondE = RRead.safe_division(Bdict['divB_norm'], Edict['divE_norm'])
-        dBondE[np.where(Bdict['divB_norm']<1e-15)] = 0.0
-        cBoncE = RRead.safe_division(Bdict['curlB_norm'], Edict['curlE_norm'])
-        cBoncE[np.where(Bdict['curlB_norm']<1e-15)] = 0.0
-                
-        NEWROW += self.recval(Volume, gdet, [Bdict['B2'], 
-                                             Bdict['divB_norm'],  
-                                             Bdict['curlB_norm'], 
-                                             B2onE2, dBondE, cBoncE])
-        if it==0: self.update_header(['B2', 'divB_norm', 'curlB_norm', 
-                                      'B2/E2', 'divB/divE', 'curlB/curlE'], 
-                                     withrec=True)
-        del Edict, Bdict, gdet, Volume
-        
-
         # Close iteration file and return results
         f.close()
         iteration = int(it / self.param['IOHDF5::out_every'])
@@ -441,19 +381,6 @@ class MyClass:
               + ' Progress = {:.2f}%'.format(percent_done), flush=True)
         return NEWROW
     
-def RK4_tau(t, alpha):
-    dt = t[1] - t[0]
-    tau = [t[0]]
-    #alpha_half = NumMethods.Lagrange_interp(t, alpha, t[:-1] + (dt / 2))
-    for i in range(len(alpha)-1):
-        k1 = alpha[i]
-        #k2 = alpha_half[i]
-        k2 = (alpha[i+1]+alpha[i])/2
-        k3 = k2
-        k4 = alpha[i+1]
-        tau += [tau[-1] + (k1 + 2*k2 + 2*k3 + k4) * (dt / 6)]
-    return np.array(tau)
-    
 if __name__ == "__main__":
     
     print("\n#################################", flush=True)
@@ -465,24 +392,36 @@ if __name__ == "__main__":
     # Simulation to analyse
     simname = sys.argv[1]
     param = RRead.read_parameters(simname)
-    Lin = LinData.LinData_Class(param)
     print(param['simname'], flush=True)
+    Lin = LinData.LinData_Class(param)
     
     ###############################################
-    print('\n===== Create Time file', flush=True)
+    print('\n===== Collecting iterations', flush=True)
     ###############################################
-    all_it, all_t = RRead.collect_iteration_and_time(Lin.param)
-    all_hdf5it = all_it[0::param['IOHDF5::out_every']
-                        * (param['max_refinement_levels'] - 1)]
+    if param['nbr_restarts']==1:
+        all_it, all_t = RRead.collect_iteration_and_time(Lin.param)
+        all_hdf5it = all_it[0::param['IOHDF5::out_every']
+                            * (param['max_refinement_levels'] - 1)]
+    else:
+        all_hdf5it = RRead.collect_h5iteration(Lin.param)
+        all_it = all_hdf5it
+        all_it_wrl0 = []
+        all_t = []
+        for it in all_hdf5it:
+            f = h5py.File('{}_it_{:06d}.hdf5'.format(
+                param['h5datapath'] + param['simname'], it), 'r')
+            all_t += [f[list(f.keys())[0]].attrs['time']]
+            working_keys = [k for k in list(f.keys()) if ' rl=0' in k]
+            if len(working_keys)!=0:
+                all_it_wrl0 += [it]
+        all_hdf5it = all_it_wrl0
+        
+    # Create time file
     filedat = np.array([all_it, all_t]).T
     pd.DataFrame(filedat).to_csv(param['datapath']+'Time_dt.csv', 
                                  header=['it', 't'], index=False)
     Lin = LinData.LinData_Class(param)
     
-    # Iterations to go through
-    all_h5it = RRead.collect_h5iteration(Lin.param)
-    if all_h5it!=all_hdf5it:
-        all_hdf5it = all_h5it
     nbr_iterations = len(all_hdf5it)
     print('number of iterations : ', int(nbr_iterations), flush=True)
     
@@ -505,7 +444,8 @@ if __name__ == "__main__":
     print('\n===== Creating data header', flush=True)
     ###############################################
     
-    print('the estimators and locations recorded are: ', funcs.locsuffix, flush=True)
+    print('the estimators and locations recorded are: ', 
+          funcs.locsuffix, flush=True)
     print('unless the variable is already a global value', flush=True)
     NEWROW_it0 = funcs.getvals(0)
     save_header = funcs.header.copy()
@@ -532,6 +472,7 @@ if __name__ == "__main__":
             CalcPropTime = True
     
     # Update Header
+    funcs.print_header_val = False
     if param['synchronous']:
         funcs.update_header(['tau', 'a', 'an', 'H', 'z'], 
                             withrec=False)
@@ -541,8 +482,11 @@ if __name__ == "__main__":
             keys = ['tau', 'a', 'an', 'H', 'z']
         else:
             keys = ['a', 'an', 'H', 'z']
-    keys += ['drho_u', 'dTheta', 
-             'ddrho_u', 'ddTheta']
+            
+    keys += ['drho_u', 'ddrho_u']
+    if 'theta' in funcs.header:
+        keys += ['dTheta', 'ddTheta']
+    
     for loc in funcs.locsuffix:
         for key in keys:
             funcs.update_header([key+loc], withrec=False)
@@ -564,7 +508,8 @@ if __name__ == "__main__":
     if not param['synchronous']:
         if CalcPropTime:
             for loc in funcs.locsuffix:
-                tau_dict[loc] = RK4_tau(get_prev_val('t'), get_prev_val('alpha'+loc))
+                tau_dict[loc] = RK4_tau(get_prev_val('t'), 
+                                        get_prev_val('alpha'+loc))
         else:
             for loc in funcs.locsuffix:
                 tau_dict[loc] = get_prev_val('tau'+loc)
@@ -593,12 +538,13 @@ if __name__ == "__main__":
             drho_u_f = funcs.pert(get_prev_vali(i, 'rho'+loc), 'rho', tau)
             drho_u = get_prev_vali(i, 'rho'+loc) / Lin.rho_u(tau) - 1
             if i==0: Lin.delta_initial[loc] = drho_u
-            dTheta = funcs.pert(get_prev_vali(i, 'Theta'+loc), 'Theta', tau)
+            NEWROW += [drho_u]
+            NEWROW += [funcs.pert_withloc(drho_u, 'drho', tau, loc)]
             
-            # Record
-            NEWROW += [drho_u, dTheta]
-            NEWROW += [funcs.pert_withloc(drho_u, 'drho', tau, loc), 
-                       funcs.pert_withloc(dTheta, 'dTheta', tau, loc)]
+            if 'theta' in funcs.header:
+                dTheta = funcs.pert(get_prev_vali(i, 'theta'+loc), 'Theta', tau)
+                NEWROW += [dTheta]
+                NEWROW += [funcs.pert_withloc(dTheta, 'dTheta', tau, loc)]
         new_data_values += [NEWROW]
             
     

@@ -53,11 +53,10 @@ class LinData_Class:
         self.d1x = np.arange(param['xmin'], param['xmax'], param['dx'])
         self.d1y = np.arange(param['ymin'], param['ymax'], param['dy'])
         self.d1z = np.arange(param['zmin'], param['zmax'], param['dz'])
-        self.d3x, self.d3y, self.d3z = np.meshgrid(self.d1x, self.d1y, 
-                                                   self.d1z, indexing='ij')
+        self.d3x, self.d3y, self.d3z = np.meshgrid(
+            self.d1x, self.d1y, self.d1z, indexing='ij')
         
         # rescale dt
-        time_key=''
         if 'ICPertFLRW_time' in self.param.keys():
             if self.param['ICPertFLRW_time']=='proper':
                 self.param['dt'] *= self.evo.a(self.param['cctk_initial_time'])
@@ -66,31 +65,12 @@ class LinData_Class:
                 self.param['dt'] *= self.evo.a(self.param['cctk_initial_time'])
         else:
             self.param['dt'] *= self.evo.a(self.param['cctk_initial_time'])
-            
-    def t(self, torh5):
-        if isinstance(torh5, (int, float, np.ndarray, np.generic)):
-            return torh5
-        elif isinstance(torh5, (list, pd.core.series.Series)):
-            return np.array(torh5)
-        elif isinstance(torh5, str):
-            t = self.temporal_file['t']
-            if torh5=='h5':
-                return np.array(t[0::self.param['IOHDF5::out_every']])
-            elif torh5=='h5err':
-                t5 = t[0::self.param['IOHDF5::out_every']]
-                return np.array(t5[0::2])
-            else:
-                return t
-        else:
-            print('ERROR: t passed to background values not recognised, ', 
-                  torh5, type(torh5))
-            sys.exit()
     
     def temp_from_temp(self, var_wanted_str, 
                        var_known_str, var_known_float):
         idx = np.argmin(abs(self.temporal_file[var_known_str] 
                             - var_known_float))
-        return self.temporal_file[var_wanted_str][idx]
+        return self.temporal_file[var_wanted_str][idx]            
         
     def F(self, torh5):
         return self.evo.fL(torh5) + (3/2)*self.evo.Omega_m(torh5)
@@ -184,4 +164,4 @@ class LinData_Class:
     
     def dRicciSconf(self, torh5, loc):
         return np.array([-4 * (self.k_pert**2) * self.Rc(loc)] 
-                        * len(self.t(torh5)))
+                        * len(torh5))

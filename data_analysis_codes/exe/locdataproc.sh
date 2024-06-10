@@ -8,7 +8,7 @@
 #SBATCH --output=slurm_out/%j-%x.out
 #SBATCH --error=slurm_out/%j-%x.err
 
-now=$(date +"%T")
+now=$(date)
 echo "Start time : $now"
 
 module purge
@@ -21,14 +21,14 @@ module load gsl/2.5 papi/5.7.0 hwloc/2.1.0 hdf5/1.8.17 openssl/1.1.1
 module load curl/8.4.0 libz/1.2.11 perl/5.26
 module load fftw/3.3.8
 
-for SIMNAME in pflrw_d3e2_L1206_t1_N32_EdS_GRH_spin_CPunc_MR
+for SIMNAME in testmpi12
 do
  #python split_files.py $SIMNAME
  #python extract_constraints.py $SIMNAME 15
- python calc_Theta.py $SIMNAME 15
- #python extract_data.py $SIMNAME 15
+ #python calc_Theta.py $SIMNAME 15
+ python extract_data.py $SIMNAME 15
 done
 
-now=$(date +"%T")
+now=$(date)
 echo "End time : $now"
 

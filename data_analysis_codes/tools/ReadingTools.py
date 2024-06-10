@@ -56,29 +56,38 @@ def progressbar(it):
 def read_parameters(simname):
     # Find parameter file
     HorSloc = '/home/robynm/simulations/'
-    path = HorSloc+simname+'/output-0000/'+simname+'.par'
-    data_file = BASH('cat '+path)
+    path = HorSloc + simname + '/output-0000/' + simname + '.par'
+    data_file = BASH('cat ' + path)
     if 'ERROR' in data_file:
         HorSloc = '/Users/robynmunoz/simulations/'
-        path = HorSloc+simname+'/output-0000/'+simname+'.par'
-        data_file = BASH('cat '+path)
+        path = HorSloc + simname + '/output-0000/' + simname + '.par'
+        data_file = BASH('cat ' + path)
         if 'ERROR' in data_file:
             HorSloc = '/mnt/lustre2/ET_sims/'
-            path = HorSloc+simname+'/output-0000/'+simname+'.par'
-            data_file = BASH('cat '+path)
+            path = HorSloc + simname + '/output-0000/' + simname + '.par'
+            data_file = BASH('cat ' + path)
             if 'ERROR' in data_file:
                 print("Error in loading parameter file, check that it's in")
-                print('/home/robynm/simulations/'+simname+'/output-0000/'+simname+'.par')
+                print('/home/robynm/simulations/' + simname + '/output-0000/' 
+                      + simname + '.par')
                 print('Or')
-                print('/Users/robynmunoz/simulations/'+simname+'/output-0000/'+simname+'.par')
+                print('/Users/robynmunoz/simulations/' + simname + '/output-0000/'
+                      + simname + '.par')
                 print('Or')
-                print('/mnt/lustre2/ET_sims/'+simname+'/output-0000/'+simname+'.par')
+                print('/mnt/lustre2/ET_sims/' + simname + '/output-0000/' 
+                      + simname + '.par')
         
     # save paths of files
     parameters = {'simname':simname, 'HorSpath':HorSloc}
     parameters['datapath'] = (parameters['HorSpath'] + parameters['simname'] 
                                 + '/output-0000/' + parameters['simname'] + '/')
     parameters['h5datapath'] = parameters['datapath'] + 'all_iterations/'
+                
+    # number of restarts
+    files = BASH('ls ' + parameters['HorSpath'] 
+                       + parameters['simname']).split('\n')
+    parameters['nbr_restarts'] = len([fl for fl in files 
+                                      if 'output' in fl and 'active' not in fl])
     
     # save all parameters
     for line in data_file.split('\n'):
@@ -89,7 +98,8 @@ def read_parameters(simname):
             value = value.strip()
             
             # format value, float, int, string
-            digitvalue = value.replace('.','',1).replace('-','',1).replace('+','',1).replace('e','',1)
+            digitvalue = value.replace('.', '', 1).replace(
+                '-', '', 1).replace('+', '', 1).replace('e', '', 1)
             if digitvalue.isdigit():
                 if '.' in value or 'e' in value:
                     value = float(value)
@@ -100,7 +110,7 @@ def read_parameters(simname):
                     value = value.split('"')[1]
                     
             if variable in ['out_every', 'one_file_per_group']:
-                parameters[thorn+'::' + variable] = value
+                parameters[thorn + '::' + variable] = value
             else:
                 parameters[variable] = value
                 
@@ -112,6 +122,9 @@ def read_parameters(simname):
         parameters['N'+coord] = N
     if 'ICPertFLRW_lambda_pert1' not in parameters.keys():
         parameters['ICPertFLRW_lambda_pert1'] = parameters['Lx']
+    
+    if 'dtfac' not in parameters.keys():
+        parameters['dtfac'] = 0.5
     parameters['dt'] = parameters['dtfac'] * parameters['dx']
         
     # is cosmological constant present
@@ -221,6 +234,7 @@ def getcomponents3(f):
     else:
         print("getcomponents3 doesn't understand f format")
     return xx, xy, xz, yy, yz, zz
+
 def getcomponents4(f):
     if isinstance(f, list):
         tt, tx, ty, tz, xx, xy, xz, yy, yz, zz = f
@@ -242,38 +256,45 @@ def getcomponents4(f):
 def det3(f):
     xx, xy, xz, yy, yz, zz = getcomponents3(f)
     return -xz*xz*yy + 2*xy*xz*yz - xx*yz*yz - xy*xy*zz + xx*yy*zz
+
 def inv3(f):
     xx, xy, xz, yy, yz, zz = getcomponents3(f)
     fup = np.array([[   yy*zz-yz*yz, -(xy*zz-yz*xz),  xy*yz-yy*xz], 
                     [ -(xy*zz-xz*yz),  xx*zz-xz*xz, -(xx*yz-xy*xz)],
                     [   xy*yz-xz*yy, -(xx*yz-xz*xy),  xx*yy-xy*xy]])
     return fup / det3(f)
+
 def det4(f):
     tt, tx, ty, tz, xx, xy, xz, yy, yz, zz = getcomponents4(f)
-    det = (tz*tz*xy*xy - 2*ty*tz*xy*xz + ty*ty*xz*xz - tz*tz*xx*yy 
-           + 2*tx*tz*xz*yy - tt*xz*xz*yy + 2*ty*tz*xx*yz - 2*tx*tz*xy*yz 
-           - 2*tx*ty*xz*yz + 2*tt*xy*xz*yz + tx*tx*yz*yz - tt*xx*yz*yz 
-           - ty*ty*xx*zz + 2*tx*ty*xy*zz - tt*xy*xy*zz - tx*tx*yy*zz + tt*xx*yy*zz)
+    det = (tz*tz*xy*xy - 2*ty*tz*xy*xz + ty*ty*xz*xz 
+           - tz*tz*xx*yy + 2*tx*tz*xz*yy - tt*xz*xz*yy 
+           + 2*ty*tz*xx*yz - 2*tx*tz*xy*yz - 2*tx*ty*xz*yz 
+           + 2*tt*xy*xz*yz + tx*tx*yz*yz - tt*xx*yz*yz 
+           - ty*ty*xx*zz + 2*tx*ty*xy*zz - tt*xy*xy*zz 
+           - tx*tx*yy*zz + tt*xx*yy*zz)
     return det
+
 def inv4(f):
     tt, tx, ty, tz, xx, xy, xz, yy, yz, zz = getcomponents4(f)
-    fup = np.array([[-xz*xz*yy + 2*xy*xz*yz - xx*yz*yz - xy*xy*zz + xx*yy*zz, 
-                     tz*xz*yy - tz*xy*yz - ty*xz*yz + tx*yz*yz + ty*xy*zz - tx*yy*zz, 
-                     -tz*xy*xz + ty*xz*xz + tz*xx*yz - tx*xz*yz - ty*xx*zz + tx*xy*zz, 
-                     tz*xy*xy - ty*xy*xz - tz*xx*yy + tx*xz*yy + ty*xx*yz - tx*xy*yz], 
-                    [tz*xz*yy - tz*xy*yz - ty*xz*yz + tx*yz*yz + ty*xy*zz - tx*yy*zz, 
-                     -tz*tz*yy + 2*ty*tz*yz - tt*yz*yz - ty*ty*zz + tt*yy*zz, 
-                     tz*tz*xy - ty*tz*xz - tx*tz*yz + tt*xz*yz + tx*ty*zz - tt*xy*zz, 
-                     -ty*tz*xy + ty*ty*xz + tx*tz*yy - tt*xz*yy - tx*ty*yz + tt*xy*yz], 
-                    [-tz*xy*xz + ty*xz*xz + tz*xx*yz - tx*xz*yz - ty*xx*zz + tx*xy*zz, 
-                     tz*tz*xy - ty*tz*xz - tx*tz*yz + tt*xz*yz + tx*ty*zz - tt*xy*zz, 
-                     -tz*tz*xx + 2*tx*tz*xz - tt*xz*xz - tx*tx*zz + tt*xx*zz, 
-                     ty*tz*xx - tx*tz*xy - tx*ty*xz + tt*xy*xz + tx*tx*yz - tt*xx*yz], 
-                    [tz*xy*xy - ty*xy*xz - tz*xx*yy + tx*xz*yy + ty*xx*yz - tx*xy*yz, 
-                     -ty*tz*xy + ty*ty*xz + tx*tz*yy - tt*xz*yy - tx*ty*yz + tt*xy*yz, 
-                     ty*tz*xx - tx*tz*xy - tx*ty*xz + tt*xy*xz + tx*tx*yz - tt*xx*yz, 
-                     -ty*ty*xx + 2*tx*ty*xy - tt*xy*xy - tx*tx*yy + tt*xx*yy]])
+    fup = np.array([
+        [-xz*xz*yy + 2*xy*xz*yz - xx*yz*yz - xy*xy*zz + xx*yy*zz, 
+         tz*xz*yy - tz*xy*yz - ty*xz*yz + tx*yz*yz + ty*xy*zz - tx*yy*zz, 
+         -tz*xy*xz + ty*xz*xz + tz*xx*yz - tx*xz*yz - ty*xx*zz + tx*xy*zz, 
+         tz*xy*xy - ty*xy*xz - tz*xx*yy + tx*xz*yy + ty*xx*yz - tx*xy*yz], 
+        [tz*xz*yy - tz*xy*yz - ty*xz*yz + tx*yz*yz + ty*xy*zz - tx*yy*zz, 
+         -tz*tz*yy + 2*ty*tz*yz - tt*yz*yz - ty*ty*zz + tt*yy*zz, 
+         tz*tz*xy - ty*tz*xz - tx*tz*yz + tt*xz*yz + tx*ty*zz - tt*xy*zz, 
+         -ty*tz*xy + ty*ty*xz + tx*tz*yy - tt*xz*yy - tx*ty*yz + tt*xy*yz], 
+        [-tz*xy*xz + ty*xz*xz + tz*xx*yz - tx*xz*yz - ty*xx*zz + tx*xy*zz, 
+         tz*tz*xy - ty*tz*xz - tx*tz*yz + tt*xz*yz + tx*ty*zz - tt*xy*zz, 
+         -tz*tz*xx + 2*tx*tz*xz - tt*xz*xz - tx*tx*zz + tt*xx*zz, 
+         ty*tz*xx - tx*tz*xy - tx*ty*xz + tt*xy*xz + tx*tx*yz - tt*xx*yz], 
+        [tz*xy*xy - ty*xy*xz - tz*xx*yy + tx*xz*yy + ty*xx*yz - tx*xy*yz, 
+         -ty*tz*xy + ty*ty*xz + tx*tz*yy - tt*xz*yy - tx*ty*yz + tt*xy*yz, 
+         ty*tz*xx - tx*tz*xy - tx*ty*xz + tt*xy*xz + tx*tx*yz - tt*xx*yz, 
+         -ty*ty*xx + 2*tx*ty*xy - tt*xy*xy - tx*tx*yy + tt*xx*yy]])
     return fup / det4(f)
+
 def normalise(f):
     return f/f[0]
 
@@ -366,7 +387,8 @@ def collect_h5iteration(param):
     all_it = []
     for o in output:
         if param['simname']+'_it_' in o:
-            itstr = o.replace(param['simname']+'_it_', '').replace('.hdf5', '')
+            itstr = o.replace(param['simname'] 
+                              + '_it_', '').replace('.hdf5', '')
             all_it += [int(itstr)]
     return all_it
 

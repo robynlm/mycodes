@@ -63,6 +63,7 @@ if __name__ == "__main__":
     all_hdf5it = all_it[0::param['IOHDF5::out_every']]
     print(' -- nbr of iterations : ', len(all_hdf5it))
     print(' i = ', sep=' ', end=' ', flush=True)
+    print('no chunk distinction', flush=True)
     for i, it in enumerate(all_hdf5it, start=1):
         print(i, ', ', sep=' ', end=' ', flush=True)
         data = f_var(it)
