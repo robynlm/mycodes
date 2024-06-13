@@ -21,9 +21,9 @@ import time
 " Submit bash command line "
 def BASH(command):
     try:
-        results = subprocess.check_output(command,shell=True)
+        results = subprocess.check_output(command, shell=True)
         strresults = str(results, 'utf-8').strip()
-    except:
+    except subprocess.CalledProcessError as e:
         strresults = "ERROR: RRead.BASH('"+command+"') did not work"
     return strresults
 
@@ -67,15 +67,17 @@ def read_parameters(simname):
             path = HorSloc + simname + '/output-0000/' + simname + '.par'
             data_file = BASH('cat ' + path)
             if 'ERROR' in data_file:
-                print("Error in loading parameter file, check that it's in")
+                print("Error in loading parameter file, check that it's in", 
+                      flush=True)
                 print('/home/robynm/simulations/' + simname + '/output-0000/' 
-                      + simname + '.par')
-                print('Or')
+                      + simname + '.par', flush=True)
+                print('Or', flush=True)
                 print('/Users/robynmunoz/simulations/' + simname + '/output-0000/'
-                      + simname + '.par')
-                print('Or')
+                      + simname + '.par', flush=True)
+                print('Or', flush=True)
                 print('/mnt/lustre2/ET_sims/' + simname + '/output-0000/' 
-                      + simname + '.par')
+                      + simname + '.par', flush=True)
+                return
         
     # save paths of files
     parameters = {'simname':simname, 'HorSpath':HorSloc}

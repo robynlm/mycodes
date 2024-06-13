@@ -1,12 +1,13 @@
 #!/bin/bash
 #SBATCH --job-name=pflrw_d3e2_L1206_t1_N96_EdS_GRH_spin_CPunc_MR
 #SBATCH --partition sciama2.q
-#SBATCH --time=8760:00:00
+#SBATCH --time=170:00:00
 #SBATCH --nodes=12
 #SBATCH --ntasks=12
 #SBATCH --cpus-per-task=15
 #SBATCH --output=/users/munozr/mycodes/pflrw_thorns/slurm_out/%x-%j.out
 #SBATCH --error=/users/munozr/mycodes/pflrw_thorns/slurm_out/%x-%j.err
+#SBATCH --exclude=node100,node101,node102,node103,node149,node158,node159
 
 now=$(date)
 echo "Start time : $now"

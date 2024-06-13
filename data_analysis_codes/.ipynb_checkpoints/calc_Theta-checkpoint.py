@@ -67,7 +67,7 @@ class MyClass:
             self.FD.dy = self.param['dy']/(2**rl)
             self.FD.dz = self.param['dz']/(2**rl)
             
-            theta_key = 'COFLUID::theta it={:06d} rl={}'.format(it, rl)
+            theta_key = self.get_key('COFLUID', 'theta', it, rl)
             
             if (theta_key not in working_keys) or self.recalculate:
 
@@ -354,29 +354,24 @@ class MyClass:
                 # Save data
                 #---------------------------------------------------
 
-                added_keys = ['Theta', 'sigmaxx', 'sigmaxy', 'sigmaxz', 'sigmayy', 
-                              'sigmayz', 'sigmazz', 'omegamag']
-                for k in added_keys:
-                    if k in working_keys:
-                        del f[k]
-
-                f.create_dataset('COFLUID::theta it={:06d} rl={}'.format(it, rl), 
-                                 data=Theta)
-                f.create_dataset('COFLUID::sigmaxx it={:06d} rl={}'.format(it, rl), 
-                                 data=sheardown[0,0])
-                f.create_dataset('COFLUID::sigmaxy it={:06d} rl={}'.format(it, rl), 
-                                 data=sheardown[0,1])
-                f.create_dataset('COFLUID::sigmaxz it={:06d} rl={}'.format(it, rl), 
-                                 data=sheardown[0,2])
-                f.create_dataset('COFLUID::sigmayy it={:06d} rl={}'.format(it, rl), 
-                                 data=sheardown[1,1])
-                f.create_dataset('COFLUID::sigmayz it={:06d} rl={}'.format(it, rl), 
-                                 data=sheardown[1,2])
-                f.create_dataset('COFLUID::sigmazz it={:06d} rl={}'.format(it, rl), 
-                                 data=sheardown[2,2])
-                f.create_dataset('COFLUID::omegamag it={:06d} rl={}'.format(it, rl), 
-                                 data=omegamag)
-                del Theta, sheardown, omegamag
+                added_vars = ['Theta', 'sigmaxx', 'sigmaxy', 'sigmaxz', 
+                              'sigmayy', 'sigmayz', 'sigmazz', 'omegamag']
+                allvar = [Theta, sheardown[0,0], sheardown[0,1], sheardown[0,2], 
+                          sheardown[1,1], sheardown[1,2], sheardown[2,2], omegamag]
+                
+                old_key = self.get_key('ADMBASE', 'gxx', it, rl)
+                for var_key, var in zip(added_vars, allvar):
+                    
+                    new_key = self.get_key('COFLUID', var_key, it, rl)
+                    if new_key in list(f.keys()):
+                        f[new_key][...] = var
+                    else:
+                        f.create_dataset(new_key, data=var)
+                    
+                    # copy attributes
+                    for atk in list(f[old_key].attrs.keys()):
+                        f[new_key].attrs[atk] = f[old_key].attrs[atk]
+                del var, Theta, sheardown, omegamag
         
         #---------------------------------------------------
         # Close things up
