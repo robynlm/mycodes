@@ -128,7 +128,8 @@ class MyClass:
     def get_1ddata(self, f, key):
         if type(key)==list:
             key = self.get_key(key[0], key[1], key[2])
-        data = RRead.fixij(f[key])
+        if key[0]!='COFLUID':
+            data = RRead.fixij(f[key])
         data = RRead.cut0(data, self.param['ghost_size'], self.param['Nx'])
         return data
     
