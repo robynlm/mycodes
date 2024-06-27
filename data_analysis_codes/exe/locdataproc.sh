@@ -2,7 +2,7 @@
 #SBATCH --job-name=dproc
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=15
-#SBATCH --time=300:00:00
+#SBATCH --time=400:00:00
 #SBATCH --mem=60G
 #SBATCH --partition=sciama2.q
 #SBATCH --output=slurm_out/%j-%x.out
@@ -38,12 +38,12 @@ echo "Number of CPUs on the allocated node : $SLURM_CPUS_ON_NODE"
 echo "Count of processors available to the job on this node : $SLURM_JOB_CPUS_PER_NODE"
 echo "Memory per CPU : $SLURM_MEM_PER_CPU"
 
-for SIMNAME in pflrw_d3e2_L1206_t1_N32_EdS_GRH_spin_CPunc_MR
+for SIMNAME in pflrw_d3e2_L1206_t1_N64_EdS_GRH_spin_CPunc_MR
 do
  #python split_files.py $SIMNAME
  #python extract_constraints.py $SIMNAME 15
- #python calc_Theta.py $SIMNAME 15
- python calc_weights.py $SIMNAME
+ python calc_Theta.py $SIMNAME 15
+ #python calc_weights.py $SIMNAME
  #python extract_data.py $SIMNAME 15
 done
 

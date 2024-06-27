@@ -7,7 +7,6 @@
 #SBATCH --cpus-per-task=15
 #SBATCH --output=/users/munozr/mycodes/pflrw_thorns/slurm_out/%x-%j.out
 #SBATCH --error=/users/munozr/mycodes/pflrw_thorns/slurm_out/%x-%j.err
-#SBATCH --exclude=node100,node101,node102,node103,node149,node158,node159
 
 now=$(date)
 echo "Start time : $now"

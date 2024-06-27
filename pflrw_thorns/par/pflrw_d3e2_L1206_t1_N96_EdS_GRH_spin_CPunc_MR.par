@@ -5,6 +5,7 @@ ActiveThorns = "Time"
 
 Cactus::cctk_initial_time = 1
 Cactus::cctk_final_time   = 1000
+Time::dtfac               = 0.1
 Cactus::terminate         = "time"
 
 ######################################
@@ -183,13 +184,10 @@ IO::out_unchunked = "no"
 IOHDF5::checkpoint                  = yes
 IO::checkpoint_dir                  = $parfile
 IO::checkpoint_ID                   = yes
-IO::checkpoint_every_walltime_hours = 1
+IO::checkpoint_every_walltime_hours = 12
 IO::checkpoint_on_terminate         = yes
 IO::recover     = "autoprobe"
 IO::recover_dir = $parfile
-IO::recover_file = "checkpoint.chkpt"
-IO::out_fileinfo = "none"
-IO::new_filename_scheme = "no"
 
 NaNChecker::check_every = 10
 NaNChecker::action_if_found = "terminate"

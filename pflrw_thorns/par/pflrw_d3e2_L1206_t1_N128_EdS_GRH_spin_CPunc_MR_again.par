@@ -5,7 +5,6 @@ ActiveThorns = "Time"
 
 Cactus::cctk_initial_time = 1
 Cactus::cctk_final_time   = 1000
-Time::dtfac               = 0.1
 Cactus::terminate         = "time"
 
 ######################################

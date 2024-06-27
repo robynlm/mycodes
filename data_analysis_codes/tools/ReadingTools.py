@@ -194,7 +194,7 @@ def fixij(f): # I do not need this for non simulations
     return np.transpose(np.array(f), (2, 1, 0))
 
 " Set of functions to cut border around data array, eg: Ghost cells "
-def cut0(data, i, N):
+def cut0(data, i, N, rl):
     if np.shape(data)[-1]==N:
         return data
     else:
