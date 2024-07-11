@@ -313,22 +313,6 @@ v[ua] 3-velocity of fluid normalised as
           = gu[ua,ub] u[lb] / wlorentz
 *)
 (************)
-       
-convertFromPrimitivesCalcVal =
-{
-  Name -> CTThorn <> "_convertFromPrimitivesVal",
-  Schedule -> {"IN HydroBase_Prim2ConInitial"},
-  ConditionalOnKeyword -> {"formalism", "Valencia"},
-  Shorthands -> {h},
-  Equations ->
-  {
-    wlorentz -> 1 / Sqrt[g[la,lb] v[ua] v[ub] + 1],
-    h -> (1 + eps) (1 + eosw),
-    DD -> rho wlorentz,
-    EE -> rho h wlorentz^2 - press,
-    SS[la] -> rho h wlorentz g[la,lb] v[ub]
-  }
-};
 
 (******************************************************************************)
 (* Convert to primitives *)
@@ -352,37 +336,6 @@ convertToPrimitivesCalc =
     v[ua]     -> gu[ua,ub] u[lb] / wlorentz,
     rho       -> DD / (wlorentz Sqrt[detg]),
     press     -> eosw rho (1 + eps)
-  }
-};
-       
-convertToPrimitivesCalcVal =
-{
-  Name -> CTThorn <> "_convertToPrimitivesVal",
-  Schedule -> {"IN HydroBase_Con2Prim"},
-  ConditionalOnKeyword -> {"formalism", "Valencia"},
-  Where -> Everywhere,
-  Shorthands -> {detg, gu[ua,ub], EEloc, SSloc[la], S2, mu, u[la]},
-  Equations ->
-  {
-    (* Need to go through this again *)
-    detg      -> detgExpr,
-    gu[ua,ub] -> 1/detg detgExpr MatrixInverse [g[ua,ub]],
-      
-    (* conservated variable without gdet *)
-    EEloc -> EE / Sqrt[detg],
-    SSloc[la] -> SS[la] / Sqrt[detg],
-    S2 -> gu[ua,ub] SSloc[la] SSloc[lb],
-      
-    (* pressure *)
-    press -> (EEloc ( eosw - 1 ) + Sqrt[EEloc^2 ( eosw + 1 )^2 - 4 S2 eosw])/2,
-    mu    -> press / eosw,
-    eps   -> 0.0, (* neglect *)
-    rho   -> mu / (1 + eps),
-      
-    (* fluid velocity *)
-    wlorentz -> Sqrt[(EEloc + press) / (mu + press)],
-    u[la] -> SSloc[la] / ((mu + press) wlorentz),
-    v[ua] -> gu[ua,ub] u[lb] / wlorentz
   }
 };
 
@@ -432,38 +385,6 @@ evolCalc =
     dtW -> (sqrt[detg] dtwlorentz / (2 u0u a))
             - a wlorentz trK sqrt[detg],
     dot[EE] -> - PD[EE (a v[ua] - b[ua]), la] - press dtW - press PD[wlorentz Sqrt[detgExpr] (a v[ua] - b[ua]), la]
-  }
-};
-       
-evolCalcVal =
-{
-  Name -> CTThorn <> "_RHSVal",
-  Schedule -> {"IN HydroBase_RHS"},
-  ConditionalOnKeyword -> {"formalism", "Valencia"},
-  Where -> InteriorNoSync,
-  Shorthands -> {dir[ua], detg, gu[ua,ub], mu, Sstress[ua,ub]},
-  Equations ->
-  {
-      (* Need to go through this again *)
-    dir[ua] -> Sign[b[ua]],
-
-    detg      -> detgExpr,
-    gu[ua,ub] -> 1/detg detgExpr MatrixInverse [g[ua,ub]],
-      
-    mu -> rho (1 + eps),
-      
-    Sstress[ua,ub] -> (mu + press) wlorentz^2 v[ua] v[ub] + press gu[ua,ub],
-
-    dot[DD] -> 0.0, (* neglect *)
-    dot[SS[la]] -> (- PD[a detgExpr g[la,lc] ((rho (1 + eps) + press) wlorentz^2 v[ub] v[uc] + press MatrixInverse[g[ub,uc]]), lb]
-                    + PD[b[ub] SS[la], lb]
-                    + a Sqrt[detg] Sstress[ub,uc] PD[g[lb,lc], la] / 2
-                    + SS[lb] PD[b[ub], la]
-                    - EE PD[a, la]),
-    dot[EE] -> (- PD[a MatrixInverse[g[ub,uc]] SS[lc], lb]
-                + PD[b[ub] EE, lb]
-                + a Sqrt[detg] Sstress[ub,uc] k[lb,lc]
-                - gu[ub,uc] SS[lc] PD[a, lb])
   }
 };
 
@@ -727,8 +648,7 @@ keywordParameters =
   {
     Name -> "formalism",
     Visibility -> "restricted",
-    Description -> "Wilson for dust and Valencia for radiation",
-    AllowedValues -> {"Wilson", "Valencia"},
+    AllowedValues -> {"Wilson"},
     Default -> "Wilson"
   },
   {
@@ -810,14 +730,11 @@ calculations =
   initialMinkowskiCalc,
   initialFLRWCalc,
   convertFromPrimitivesCalc,
-  convertFromPrimitivesCalcVal,
   evolCalc,
-  evolCalcVal,
   initRHSCalc,
   RHSStaticBoundaryCalc,
   boundaryCalc,
   convertToPrimitivesCalc,
-  convertToPrimitivesCalcVal,
   addToTmunuCalc,
   calcExpansion,
   calcExpansionBoundary

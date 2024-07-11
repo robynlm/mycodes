@@ -179,6 +179,7 @@ MasterCalc = {
                       + IfThen[alphaFullLieDeriv!=0, Upwind[b[ub], a, lb], 0]),
         
         (***** beta *****)
+        (* eq 4.3.33 and 4.3.34 in Alcubierre*)
         partialtbeta[ua] -> mlbB[ua] + IfThen[betaFullLieDeriv!=0, Upwind[b[ub], b[ua], lb], 0],
         partialtB[ua] -> (betaXi a^betaP
                           (mlbXtrhs[ua] - IfThen[betaFullLieDeriv!=0, Upwind[b[ub], mlbXt[ua], lb], 0])
