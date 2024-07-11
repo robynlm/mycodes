@@ -21,9 +21,9 @@ CoordBase::zmin =  -603.0
 CoordBase::xmax =  +603.0
 CoordBase::ymax =  +603.0
 CoordBase::zmax =  +603.0
-CoordBase::dx = 18.84375
-CoordBase::dy = 18.84375
-CoordBase::dz = 18.84375
+CoordBase::dx = 75.375
+CoordBase::dy = 75.375
+CoordBase::dz = 75.375
 
 CoordBase::boundary_size_x_lower     = 3
 CoordBase::boundary_size_y_lower     = 3

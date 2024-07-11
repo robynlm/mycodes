@@ -5,7 +5,7 @@ ActiveThorns = "Time"
 
 Cactus::cctk_initial_time = 1
 Cactus::cctk_final_time   = 1000
-Time::dtfac               = 0.0006
+Time::dtfac               = 0.1
 Cactus::terminate         = "time"
 
 ######################################
@@ -120,19 +120,17 @@ ADMBase::shift_evolution_method = "ML_BSSN"
 ADMBase::dtlapse_evolution_method = "static"
 ADMBase::dtshift_evolution_method = "static"
 
-# d/dt alpha = -f alpha^n K - alphaDriver (alpha - 1)
-ML_BSSN::harmonicN       = 1
-ML_BSSN::harmonicF       = 2.0
-ML_BSSN::alphaDriver     = 0.0
-ML_BSSN::MinimumLapse    = 1.0e-8
-ML_BSSN::advectLapse     = 1.0
+# Alpha evolution equation
+CosmoLapse::alphaF = 2.0
+CosmoLapse::alphaN = 1
+CosmoLapse::Kexpression = 1
+CosmoLapse::alphaFullLieDeriv = 1
 
-CosmoLapse::CosmoLapse_Kexpression = "background_K"
-
-# d/dt beta^i = C Xt^i - betaDriver alpha^shiftAlphaPower beta^i
-ML_BSSN::ShiftGammaCoeff = 0.75
-ML_BSSN::betaDriver      = 1.0
-ML_BSSN::shiftAlphaPower = 0.0 
+# Beta evolution equation
+CosmoLapse::betaXi = 0.75
+CosmoLapse::betaEta = 1.0
+CosmoLapse::betaP = 2
+CosmoLapse::betaFullLieDeriv = 1
 
 ######################################
 # Output
@@ -140,6 +138,14 @@ ML_BSSN::shiftAlphaPower = 0.0
 ActiveThorns = "CarpetIOBasic CarpetIOScalar CarpetIOASCII CarpetIOHDF5 NaNChecker"
 IO::out_dir = $parfile
 IO::out_unchunked = "no"
+
+IOHDF5::checkpoint                  = yes
+IO::checkpoint_dir                  = $parfile
+IO::checkpoint_ID                   = yes
+IO::checkpoint_every_walltime_hours = 12
+IO::checkpoint_on_terminate         = yes
+IO::recover     = "autoprobe"
+IO::recover_dir = $parfile
 
 NaNChecker::check_every = 50
 NaNChecker::action_if_found = "terminate"

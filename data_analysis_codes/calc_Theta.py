@@ -38,31 +38,15 @@ class MyClass:
         self.RCW = RCW_file.Ricci_CoGrad_Weyl_Class(self.FD)
         self.recalculate = True
             
-    def get_key(self, thorn_name, var_name, it, rl):
+    def gk(self, thorn_name, var_name, it, rl):
         return thorn_name + '::{} it={} tl=0 rl={}'.format(
             var_name, it, rl)
             
     def get_1ddata(self, f, key):
         if type(key)==list:
-            key = self.get_key(key[0], key[1], key[2], key[3])
-        data = self.cut(RRead.fixij(f[key]))
+            key = self.gk(key[0], key[1], key[2], key[3])
+        data = RRead.fixij(f[key])
         return data
-    
-    def cut(self, data, rl):
-        Nshape = np.shape(data)[0]
-        if rl>0 and Nshape!=self.param['Nx']*(2**rl):
-            icut = self.param['ghost_size']
-            data = data[icut:-icut, icut:-icut, i:-icut]
-        return data
-    
-    def cut2(self, data, rl):
-        d01 = self.cut(data[0,1])
-        d02 = self.cut(data[0,2])
-        d12 = self.cut(data[1,2])
-        cdata = np.array([[self.cut(data[0,0]), d01, d02],
-                          [d01, self.cut(data[1,1]), d12],
-                          [d02, d12, self.cut(data[2,2])]])
-        return cdata
     
     def getTheta(self, it):
         
@@ -87,8 +71,12 @@ class MyClass:
             self.FD.dx = self.param['dx']/(2**rl)
             self.FD.dy = self.param['dy']/(2**rl)
             self.FD.dz = self.param['dz']/(2**rl)
+            if rl==0:
+                self.FD.pBound = periodic_boundary
+            else:
+                self.FD.pBound = not_periodic_boundary
             
-            theta_key = self.get_key('COFLUID', 'theta', it, rl)
+            theta_key = self.gk('COFLUID', 'theta', it, rl)
             
             if (theta_key not in working_keys) or self.recalculate:
 
@@ -97,11 +85,10 @@ class MyClass:
                 #---------------------------------------------------
                 # Component values
                 if self.verbose: print('get metric', flush=True)
-                gij_keys = [self.get_key('ADMBASE', gij, it, rl) 
+                gij_keys = [self.gk('ADMBASE', gij, it, rl) 
                             for gij in ['gxx', 'gxy', 'gxz', 
                                         'gyy', 'gyz', 'gzz']]
                 metric, gdown = RRead.read_xyz(f, gij_keys)
-                gdown = self.cut2(gdown)
                 gup = RRead.inv3(gdown)
                 gdet = RRead.det3(gdown)
                 sgdet = np.sqrt(gdet)
@@ -116,7 +103,7 @@ class MyClass:
                 #---------------------------------------------------
                 #  Lapse
                 #---------------------------------------------------
-                if (self.get_key('ADMBASE', 'alp', it, rl) 
+                if (self.gk('ADMBASE', 'alp', it, rl) 
                     in working_keys):
                     if self.verbose: print('get lapse', flush=True)
                     alpha = self.get_1ddata(
@@ -125,7 +112,7 @@ class MyClass:
                     alpha = Box1
                 alpha2 = alpha**2
 
-                if (self.get_key('ADMBASE', 'dtalp', it, rl) 
+                if (self.gk('ADMBASE', 'dtalp', it, rl) 
                     in working_keys):
                     dtalpha = self.get_1ddata(
                         f, ['ADMBASE', 'dtalp', it, rl])
@@ -135,54 +122,42 @@ class MyClass:
                 #---------------------------------------------------
                 #  Shift
                 #---------------------------------------------------
-                if (self.get_key('ADMBASE', 'betax', it, rl) 
+                if (self.gk('ADMBASE', 'betax', it, rl) 
                     in working_keys):
                     if self.verbose: print('get shift', flush=True)
-                    betax = self.get_1ddata(
-                        f, ['ADMBASE', 'betax', it, rl])
-                    betay = self.get_1ddata(
-                        f, ['ADMBASE', 'betay', it, rl])
-                    betaz = self.get_1ddata(
-                        f, ['ADMBASE', 'betaz', it, rl])
-                    betaup = np.array([betax, betay, betaz])
+                    betaup = np.array(
+                        [self.get_1ddata(f, ['ADMBASE', 'betax', it, rl]), 
+                         self.get_1ddata(f, ['ADMBASE', 'betay', it, rl]), 
+                         self.get_1ddata(f, ['ADMBASE', 'betaz', it, rl])])
                     betadown = np.einsum(
                         'ij...,i...->j...', gdown, betaup)
                     betasquare = np.einsum(
                         'i...,i...->...', betadown, betaup)
-                    del betax, betay, betaz
                 else:
                     betaup = np.array([Box0, Box0, Box0])
                     betadown = np.array([Box0, Box0, Box0])
                     betasquare = Box0
 
-                if (self.get_key('ADMBASE', 'dtbetax', it, rl) 
+                if (self.gk('ADMBASE', 'dtbetax', it, rl) 
                     in working_keys):
                     if self.verbose: 
                         print('get dtshift', flush=True)
-                    dtbetax = self.get_1ddata(
-                        f, ['ADMBASE', 'dtbetax', it, rl])
-                    dtbetay = self.get_1ddata(
-                        f, ['ADMBASE', 'dtbetay', it, rl])
-                    dtbetaz = self.get_1ddata(
-                        f, ['ADMBASE', 'dtbetaz', it, rl])
-                    dtbetaup = np.array([dtbetax, dtbetay, dtbetaz])
-                    del dtbetax, dtbetay, dtbetaz
+                    dtbetaup = np.array(
+                        [self.get_1ddata(f, ['ADMBASE', 'dtbetax', it, rl]),
+                         self.get_1ddata(f, ['ADMBASE', 'dtbetay', it, rl]),
+                         self.get_1ddata(f, ['ADMBASE', 'dtbetaz', it, rl])])
                 else:
                     dtbetaup = np.array([Box0, Box0, Box0])
 
                 #---------------------------------------------------
                 #  Spacetime metric
                 #---------------------------------------------------
-                g4down400 = -alpha2 + betasquare
-                g4down4 = np.array([[g4down400,
-                                    betadown[0], betadown[1], 
-                                     betadown[2]],
-                                   [betadown[0], gdown[0,0], 
-                                    gdown[0,1], gdown[0,2]],
-                                   [betadown[1], gdown[1,0], 
-                                    gdown[1,1], gdown[1,2]],
-                                   [betadown[2], gdown[2,0], 
-                                    gdown[2,1], gdown[2,2]]])
+                g4down400 = - alpha2 + betasquare
+                g4down4 = np.array(
+                    [[g4down400, betadown[0], betadown[1], betadown[2]],
+                     [betadown[0], gdown[0,0], gdown[0,1], gdown[0,2]],
+                     [betadown[1], gdown[1,0], gdown[1,1], gdown[1,2]],
+                     [betadown[2], gdown[2,0], gdown[2,1], gdown[2,2]]])
 
                 g4up4 = RRead.inv4(g4down4)
                 del betasquare
@@ -193,42 +168,37 @@ class MyClass:
                 if not param['synchronous']:
                     if self.verbose: 
                         print('get fluid velocity', flush=True)
-                    if (self.get_key('CT_DUST', 'u1', it, rl) 
+                    if (self.gk('CT_DUST', 'u1', it, rl) 
                         in working_keys):
-                        u1down = self.get_1ddata(
-                            f, ['CT_DUST', 'u1', it, rl])
-                        u2down = self.get_1ddata(
-                            f, ['CT_DUST', 'u2', it, rl])
-                        u3down = self.get_1ddata(
-                            f, ['CT_DUST', 'u3', it, rl])
                         W = self.get_1ddata(
-                            f, ['CT_DUST', 'W', it, rl])
-                        W = W / sgdet
+                            f, ['CT_DUST', 'W', it, rl]) / sgdet
                         u0up = W / alpha
-                        udown3 = np.array([u1down, u2down, u3down])
+                        udown3 = np.array(
+                            [self.get_1ddata(f, ['CT_DUST', 'u1', it, rl]),
+                             self.get_1ddata(f, ['CT_DUST', 'u2', it, rl]),
+                             self.get_1ddata(f, ['CT_DUST', 'u3', it, rl])])
                         u0down = (-alpha2 * u0up 
                                   + np.einsum(
                                       'i...,i...->...', 
                                       udown3, betaup))
-                        udown4 = np.array([u0down, 
-                                           u1down, u2down, u3down])
+                        udown4 = np.array(
+                            [u0down, udown3[0], udown3[1], udown3[2]])
                         uup4 = np.einsum(
                             'ab...,b...->a...', g4up4, udown4)
-                        del u0up, u0down
-                        del u1down, u2down, u3down, udown3
+                        del u0up, u0down, udown3
                     else:
                         W = self.get_1ddata(
                             f, ['HYDROBASE', 'w_lorentz', it, rl])
                         u0up = W / alpha
-                        u1up = W * (self.get_1ddata(
-                            f, ['HYDROBASE', 'vel[0]', it, rl]) 
-                                    - (betaup[0]/alpha))
-                        u2up = W * (self.get_1ddata(
-                            f, ['HYDROBASE', 'vel[1]', it, rl]) 
-                                    - (betaup[1]/alpha))
-                        u3up = W * (self.get_1ddata(
-                            f, ['HYDROBASE', 'vel[2]', it, rl]) 
-                                    - (betaup[2]/alpha))
+                        u1up = W * (
+                            self.get_1ddata(f, ['HYDROBASE', 'vel[0]', it, rl]) 
+                            - (betaup[0] / alpha))
+                        u2up = W * (
+                            self.get_1ddata(f, ['HYDROBASE', 'vel[1]', it, rl]) 
+                            - (betaup[1] / alpha))
+                        u3up = W * (
+                            self.get_1ddata(f, ['HYDROBASE', 'vel[2]', it, rl]) 
+                            - (betaup[2] / alpha))
                         uup4 = np.array([u0up, u1up, u2up, u3up])
                         udown4 = np.einsum('ab...,b...->a...', 
                                            g4down4, uup4)
@@ -246,7 +216,7 @@ class MyClass:
 
                 # rest mass energy density
                 if self.verbose: print('get rho_u', flush=True)
-                if (self.get_key('CT_DUST', 'rho', it, rl) 
+                if (self.gk('CT_DUST', 'rho', it, rl) 
                     in working_keys):
                     rho0 = self.get_1ddata(
                         f, ['CT_DUST', 'rho', it, rl])
@@ -256,11 +226,11 @@ class MyClass:
 
                 # specific internal energy
                 if self.verbose: print('get eps', flush=True)
-                if (self.get_key('CT_DUST', 'eps', it, rl) 
+                if (self.gk('CT_DUST', 'eps', it, rl) 
                     in working_keys):
                     eps = self.get_1ddata(
                         f, ['CT_DUST', 'eps', it, rl])
-                elif (self.get_key('HYDROBASE', 'eps', it, rl) 
+                elif (self.gk('HYDROBASE', 'eps', it, rl) 
                       in working_keys):
                     eps = self.get_1ddata(
                         f, ['HYDROBASE', 'eps', it, rl])
@@ -279,10 +249,9 @@ class MyClass:
                 if self.verbose: print('get the curv', flush=True)
                 varnames = ['kxx', 'kxy', 'kxz', 
                             'kyy', 'kyz', 'kzz']
-                kij_keys = [self.get_key('ADMBASE', kij, it, rl) 
+                kij_keys = [self.gk('ADMBASE', kij, it, rl) 
                             for kij in varnames]
                 curv, Kdown = RRead.read_xyz(f, kij_keys)
-                Kdown = self.cut2(Kdown)
                 del kij_keys, curv
 
                 #---------------------------------------------------
@@ -463,10 +432,10 @@ class MyClass:
                           sheardown[1,2], sheardown[2,2], 
                           omegamag]
                 
-                old_key = self.get_key('ADMBASE', 'gxx', it, rl)
+                old_key = self.gk('ADMBASE', 'gxx', it, rl)
                 for var_key, var in zip(added_vars, allvar):
                     
-                    new_key = self.get_key(
+                    new_key = self.gk(
                         'COFLUID', var_key, it, rl)
                     if new_key in list(f.keys()):
                         f[new_key][...] = var

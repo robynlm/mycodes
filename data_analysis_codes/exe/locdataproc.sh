@@ -40,9 +40,9 @@ echo "Memory per CPU : $SLURM_MEM_PER_CPU"
 
 for SIMNAME in pflrw_d3e2_L1206_t1_N64_EdS_GRH_spin_CPunc_MR
 do
- #python split_files.py $SIMNAME
+ python split_files.py $SIMNAME
  #python extract_constraints.py $SIMNAME 15
- python calc_Theta.py $SIMNAME 15
+ #python calc_Theta.py $SIMNAME 15
  #python calc_weights.py $SIMNAME
  #python extract_data.py $SIMNAME 15
 done

@@ -46,6 +46,8 @@
 
 #$(seq -f "%06g" 0 5000 48700)
 
+#scp munozr@login2.sciama.icg.port.ac.uk:~/mycode/Notebooks/Dust_Spin/Sim_with_GRHydro.png 
+
 #scp munozr@login2.sciama.icg.port.ac.uk:~/code/pflrwcodes/ebweyl/Plot_EBWeyl_BianchiII_slicing_error.ipynb ~/MyCodes/ebweyl/Plot_EBWeyl_BianchiII_slicing_error.ipynb
 #$(seq -f "%06g" 20100 100 24300)
 

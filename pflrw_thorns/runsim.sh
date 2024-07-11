@@ -1,12 +1,13 @@
 #!/bin/bash
-#SBATCH --job-name=pflrw_d3e2_L1206_t1_N96_EdS_GRH_spin_CPunc_MR
+#SBATCH --job-name=pflrw_d3e2_L1206_t1_N64_EdS_CLPT_mKPunc
 #SBATCH --partition sciama2.q
 #SBATCH --time=170:00:00
-#SBATCH --nodes=12
-#SBATCH --ntasks=12
+#SBATCH --nodes=4
+#SBATCH --ntasks=4
 #SBATCH --cpus-per-task=15
 #SBATCH --output=/users/munozr/mycodes/pflrw_thorns/slurm_out/%x-%j.out
 #SBATCH --error=/users/munozr/mycodes/pflrw_thorns/slurm_out/%x-%j.err
+#SBATCH --exclude=node110,node162,node163
 
 now=$(date)
 echo "Start time : $now"
@@ -63,7 +64,7 @@ then
   echo "Copy checkpoint file"
   mkdir $SIMDIR/$SLURM_JOB_NAME
   PREVSIM="${JOBPATH}/output-$(printf "%04d" $((i - 1)))"
-  cp $PREVSIM/$SLURM_JOB_NAME/checkpoint.chkpt.it_*.h5 $SIMDIR/$SLURM_JOB_NAME/
+  cp $PREVSIM/$SLURM_JOB_NAME/checkpoint.chkpt.it_699909.file_*.h5 $SIMDIR/$SLURM_JOB_NAME/
 fi
 
 echo "Copy parameter file"
