@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=pflrw_d3e2_L1206_t1_N64_EdS_CLPT_mKPunc
+#SBATCH --job-name=pflrw_d3e2_L1206_t1_N16_EdS_CPunc
 #SBATCH --partition sciama2.q
 #SBATCH --time=170:00:00
 #SBATCH --nodes=4

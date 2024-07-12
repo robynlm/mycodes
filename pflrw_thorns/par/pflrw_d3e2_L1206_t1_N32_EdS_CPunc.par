@@ -96,7 +96,7 @@ TmunuBase::stress_energy_at_RHS  = "yes"
 ######################################
 # Evolution Space Time
 ######################################
-ActiveThorns = "MoL ML_BSSN ML_BSSN_Helper ProperTime CosmoLapse"
+ActiveThorns = "MoL ML_BSSN ML_BSSN_Helper CosmoLapse"
 ActiveThorns = "AEILocalInterp GenericFD LocalReduce LoopControl"
 
 MoL::ODE_Method             = "RK4"
@@ -208,7 +208,7 @@ IOHDF5::out_vars  = "
         CT_Dust::u2
         CT_Dust::u3
         CT_Dust::W
-        ProperTime::propertime
+        CosmoLapse::propertime
         TmunuBase::eTtt
         TmunuBase::eTtx
         TmunuBase::eTty

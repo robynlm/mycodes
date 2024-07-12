@@ -300,6 +300,46 @@ def inv4(f):
 def normalise(f):
     return f/f[0]
 
+def kronecker_delta(dim, shape):
+    Box1 = np.ones(shape)
+    Box0 = np.zeros(shape)
+    if dim == 3:
+        kd = np.array([[Box1, Box0, Box0], 
+                       [Box0, Box1, Box0], 
+                       [Box0, Box0, Box1]])
+    elif dim == 4:
+        kd = np.array([[Box1, Box0, Box0, Box0], 
+                       [Box0, Box1, Box0, Box0], 
+                       [Box0, Box0, Box1, Box0],
+                       [Box0, Box0, Box0, Box1]])
+    return kd
+
+ 
+    
+def LeviCivita3symbol(shape): # 3 indices
+    Nx, Ny, Nz = shape
+    LC = np.zeros((3, 3, 3, Nx, Ny, Nz))
+    for i1 in [0,1,2]:
+        for i2 in np.delete([0,1,2], i1):
+            for i3 in np.delete([0,1,2], [i1, i2]):
+                num = (i2-i1) * (i3-i1) * (i3-i2)
+                den = (abs(i2-i1) * abs(i3-i1) * abs(i3-i2))
+                LC[i1,i2,i3,:,:,:] = float(num / den)
+    return LC
+    
+def LeviCivita4symbol(shape): # 4 indices
+    Nx, Ny, Nz = shape
+    LC = np.zeros((4, 4, 4, 4, Nx, Ny, Nz))
+    for i0 in [0,1,2,3]:
+        for i1 in np.delete([0,1,2,3], i0):
+            for i2 in np.delete([0,1,2,3], [i0, i1]):
+                for i3 in np.delete([0,1,2,3], [i0, i1, i2]):
+                    num = (i1-i0) * (i2-i0) * (i3-i0) * (i2-i1) * (i3-i1) * (i3-i2)
+                    den = (abs(i1-i0) * abs(i2-i0) * abs(i3-i0) 
+                           * abs(i2-i1) * abs(i3-i1) * abs(i3-i2))
+                    LC[i0,i1,i2,i3,:,:,:] = float(num / den)
+    return LC
+
 def readasctable(name, colnames):
     try:
         data = pd.read_csv(name, header=6, names=colnames, delimiter=' ')
